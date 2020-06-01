@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#2BD9B4</color>
+    <color name="primary">#FFFFFF</color>
+
+    <color name="gray_1">#111111</color>
+    <color name="gray_2">#222222</color>
+    <color name="gray_3">#333333</color>
+    <color name="gray_4">#444444</color>
+    <color name="gray_5">#555555</color>
+    <color name="gray_6">#666666</color>
+    <color name="gray_7">#777777</color>
+    <color name="gray_8">#888888</color>
+    <color name="gray_9">#999999</color>
+    <color name="gray_a">#AAAAAA</color>
+    <color name="gray_b">#BBBBBB</color>
+    <color name="gray_c">#CCCCCC</color>
+    <color name="gray_d">#DDDDDD</color>
+    <color name="gray_e">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="f1">#F1F1F1</color>
+    <color name="f2">#F2F2F2</color>
+    <color name="f3">#F3F3F3</color>
+    <color name="f4">#F4F4F4</color>
+    <color name="f5">#F5F5F5</color>
+    <color name="f6">#F6F6F6</color>
+    <color name="f7">#F7F7F7</color>
+    <color name="f8">#F8F8F8</color>
+    <color name="f9">#F9F9F9</color>
+
+
+</resources>

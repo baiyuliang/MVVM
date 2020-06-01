@@ -1,0 +1,14 @@
+<paths>
+    <external-path
+        name="path1"
+        path="MVVM" />
+    <external-path
+        name="path2"
+        path=".com.byl.mvvm" />
+    <external-path
+        name="path3"
+        path="Android/data/com.byl.mvvm/" />
+    <root-path
+        name="camera_photos"
+        path="" />
+</paths>
