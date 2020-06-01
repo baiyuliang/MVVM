@@ -5,7 +5,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 项目框架整体架构图：
 
-![架构图](https://img-blog.csdnimg.cn/20200601152544441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2JhaXl1bGlhbmcyMDEz,size_16,color_FFFFFF,t_70)
+![架构图](https://img-blog.csdnimg.cn/20200601152544441.png)
 
 ## 本框架的特点：  
 
