@@ -71,6 +71,12 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
         return contentView
     }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        isViewCreated = true
+        lazyLoad()
+    }
 
     private fun init() {
         EventBus.getDefault().register(this)
