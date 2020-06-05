@@ -98,3 +98,34 @@ Fragment同！
 当然，缺点就是发送一个消息，所有界面都会收到，个人认为利大于弊，且弊可以忽略
 
 该框架已应用到自己公司项目中，运行良好，如果后续发现有坑的地方，会及时更新！
+
+## 2020.06.05：
+接口调用流程简化，新增接口只需要在ApiService中添加后，即可直接在ViewModel中通过httpUtil调用，一步到位！
+
+另附上文件上传案例代码，需要时以作参考：
+
+        fun uploadFile(path: String) {
+            val file = File(path)
+            val map: HashMap<String, RequestBody> = LinkedHashMap()
+            val requestBody: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
+            map["file\"; filename=\"" + file.name] = requestBody//file为后台规定参数
+            map["name"] = RequestBody.create(MediaType.parse("text/plain"), file.name)
+            map["arg1"] = RequestBody.create(MediaType.parse("text/plain"), "arg1")//普通参数
+            map["arg2"] = RequestBody.create(MediaType.parse("text/plain"), "arg2")
+
+            //签名（根据服务器规则）
+            val params = LinkedHashMap<String, String?>()
+            params["name"] = file.name
+            params["arg1"] = "arg1"
+            params["arg2"] = "arg2"
+            val sign: String = getSign(params)
+            map["sign"] = RequestBody.create(MediaType.parse("text/plain"), sign)
+
+            launch({ httpUtil.upLoadFile(URLConstant.COMMON_URL_UPLOAD, map) }, uploadData)
+         }
+
+ApiService:
+
+        @Multipart
+        @POST("/upload")
+        suspend fun upLoadFile(@PartMap map: HashMap<String, RequestBody>): BaseResult<UploadModel>
