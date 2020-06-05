@@ -44,7 +44,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 Fragment同！
 
-列表adapter：
+列表Adapter：
 
     class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
         BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
@@ -58,7 +58,12 @@ Fragment同！
     
     }
 
-调用接口（ViewModel）：
+添加接口（ApiService）:
+
+    @GET("test")
+    suspend fun test(@QueryMap options: HashMap<String, String?>): BaseResult<TestModel>
+
+创建（ViewModel）：
 
     class MainViewModel : BaseViewModel() {
     
@@ -69,7 +74,11 @@ Fragment同！
         }
     
     }
-在Activity或Fragment中直接用vm.getArticleList()即可
+    
+调用接口：
+在Activity或Fragment中：
+
+    vm.getArticleList()
 
 消息传递：
 
