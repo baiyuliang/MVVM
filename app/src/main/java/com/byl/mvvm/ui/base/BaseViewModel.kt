@@ -21,7 +21,7 @@ open class BaseViewModel : ViewModel() {
 
     private val AUTH_SECRET = "123456"//前后台协议密钥
 
-    val httpUtil by lazy { HttpUtil.getInstance() }
+    val httpUtil by lazy { HttpUtil.getInstance().getService() }
 
     var isShowLoading = MutableLiveData<Boolean>()//是否显示loading
     var errorData = MutableLiveData<ErrorResult>()//错误信息
