@@ -65,7 +65,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
             initClick()
             initData()
             initVM()
-            initObserve()
             LogUtil.e(getClassName())
         }
 
@@ -143,17 +142,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     //需要懒加载的数据，重写此方法
     abstract fun lazyLoadData()
-
-    private fun initObserve() {
-        //loading
-        vm.isShowLoading.observe(this, Observer {
-            if (it) showLoading() else dismissLoding()
-        })
-        //错误信息
-        vm.errorData.observe(this, Observer {
-            Toast.makeText(mContext, it.errMsg, Toast.LENGTH_SHORT).show()
-        })
-    }
 
     private fun showLoading() {
         if (loadingDialog == null) {
