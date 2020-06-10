@@ -130,7 +130,7 @@ Fragment同！
             val sign: String = getSign(params)
             map["sign"] = RequestBody.create(MediaType.parse("text/plain"), sign)
 
-            launch({ httpUtil.upLoadFile(URLConstant.COMMON_URL_UPLOAD, map) }, uploadData)
+            launch({ httpUtil.upLoadFile(map) }, uploadData)
          }
 
 ApiService:
