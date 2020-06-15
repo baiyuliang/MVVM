@@ -164,4 +164,9 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
      * 接口请求错误回调
      */
     open fun errorResult(errorResult: ErrorResult) {}
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        contentView = null
+    }
 }
