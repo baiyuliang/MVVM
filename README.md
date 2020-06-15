@@ -138,3 +138,20 @@ ApiService:
         @Multipart
         @POST("/upload")
         suspend fun upLoadFile(@PartMap map: HashMap<String, RequestBody>): BaseResult<UploadModel>
+        
+## 2020.06.15
+
+在使用viewpager+fragment过程中发现，某些机型应用在按返回键退出时，fragment中的contentView未销毁：
+
+          if (null == contentView) {
+            contentView = v.root
+            //...
+        }
+        return contentView
+        
+导致再次打开app时，fragment并未重建，直接用的原来缓存在内存中的View致使页面出现问题，对于这种情况，目前的解决办法是在Fragment销毁时，将contentView=null:
+
+        override fun onDestroyView() {
+        super.onDestroyView()
+        contentView = null
+    }
