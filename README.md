@@ -13,13 +13,13 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 2.使用MVVM+协程开发模式，相较于常用的MVP+RXJava开发模式，会减省大量的MvpView的创建，以及大量的接口回调，并且不再需要Presenter的注册和注销，减少内存泄漏风险 
  
-3.ViewBinding将会使你不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
+3.ViewBinding（根据xml自动生成）将会使你不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
 
 4.关于消息传递，github有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，而本项目选择继续使用EventBus的原因，则是因为EventBus的稳定性和灵活性  
 
 ## Example
 
-编写Activity：
+## 编写Activity（只需要传入对应的ViewModel和ViewBinding即可，abstract方法自定义）：
 
     class TestActivity : BaseActivity<BaseViewModel, ActivityTestBinding>() {
     
@@ -44,7 +44,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 Fragment同！
 
-列表Adapter：
+## 编写Adapter（只需要传入数据model类型和item的ViewBinding即可）：
 
     class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
         BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
@@ -57,13 +57,17 @@ Fragment同！
         }
     
     }
+    
+一个convert方法解决，注意 val v = holder.v as ItemArticleBinding必须写！
 
-添加接口（ApiService）:
+## 添加接口（ApiService）:
 
     @GET("test")
     suspend fun test(@QueryMap options: HashMap<String, String?>): BaseResult<TestModel>
+    
+注意：suspend不可缺少！
 
-创建（ViewModel）：
+## 创建ViewModel：
 
     class MainViewModel : BaseViewModel() {
     
@@ -75,12 +79,16 @@ Fragment同！
     
     }
     
-调用接口：
-在Activity或Fragment中：
+## 调用接口：
+在Activity或Fragment中直接通过传入的ViewModel调用：
 
-    vm.getArticleList()
+    vm.getArticleList()//调用接口
+    
+    vm.articlesData.observe(this, Observer {//返回结果
+       
+    })
 
-消息传递：
+## 消息传递：
 
 本项目中，像EventBus的注册与注销，以及消息接收全部放在了BaseActivity中，并提供了一个对外的消息处理方法，利用消息Code来区分不同消息，在需要使用消息的界面，重写该方法即可：
 
