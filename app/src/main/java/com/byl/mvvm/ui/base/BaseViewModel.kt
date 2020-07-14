@@ -114,15 +114,22 @@ open class BaseViewModel : ViewModel() {
         if (isShowLoading) showLoading()
         viewModelScope.launch {
             try {
-                var result: BaseResult<T>? = null
-                withContext(Dispatchers.IO) {
-                    result = block()
-                }
-                if (result!!.errorCode == 0) {//请求成功
-                    liveData.value = result!!.data
+//                 var result: BaseResult<T>? = null
+//                 withContext(Dispatchers.IO) {
+//                     result = block()
+//                 }
+//                 if (result!!.errorCode == 0) {//请求成功
+//                     liveData.value = result!!.data
+//                 } else {
+//                     LogUtil.e("请求错误>>" + result!!.errorMsg)
+//                     showError(ErrorResult(result!!.errorCode, result!!.errorMsg, isShowError))
+//                 }
+                val result = withContext(Dispatchers.IO) { block() }
+                if (result.errorCode == 0) {//请求成功
+                    liveData.value = result.data
                 } else {
-                    LogUtil.e("请求错误>>" + result!!.errorMsg)
-                    showError(ErrorResult(result!!.errorCode, result!!.errorMsg, isShowError))
+                    LogUtil.e("请求错误>>" + result.errorMsg)
+                    showError(ErrorResult(result.errorCode, result.errorMsg, isShowError))
                 }
             } catch (e: Throwable) {//接口请求失败
                 LogUtil.e("请求异常>>" + e.message)
