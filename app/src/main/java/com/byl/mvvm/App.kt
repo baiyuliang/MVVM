@@ -2,8 +2,6 @@ package com.byl.mvvm
 
 import android.app.Application
 import android.content.Context
-import com.byl.mvvm.event.Event
-import com.byl.mvvm.event.EventMessage
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle
@@ -17,9 +15,6 @@ class App : Application() {
         var DEBUG: Boolean = false
         lateinit var instance: App
 
-        fun post(eventMessage: EventMessage) {
-            Event.getInstance().post(eventMessage)
-        }
     }
 
     override fun onCreate() {
@@ -38,23 +33,23 @@ class App : Application() {
             layout.setDisableContentWhenLoading(true) //是否在加载的时候禁止列表的操作
             layout.setEnableOverScrollBounce(false)
         }
-        SmartRefreshLayout.setDefaultRefreshHeaderCreator { context: Context?, layout: RefreshLayout? ->
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator { context: Context?, _: RefreshLayout? ->
             ClassicsHeader(context)
-                .setSpinnerStyle(SpinnerStyle.Translate)
-                .setTextSizeTitle(13f)
-                .setDrawableArrowSize(15f)
-                .setDrawableProgressSize(15f)
-                .setDrawableMarginRight(10f)
-                .setFinishDuration(0)
+                    .setSpinnerStyle(SpinnerStyle.Translate)
+                    .setTextSizeTitle(13f)
+                    .setDrawableArrowSize(15f)
+                    .setDrawableProgressSize(15f)
+                    .setDrawableMarginRight(10f)
+                    .setFinishDuration(0)
         }
-        SmartRefreshLayout.setDefaultRefreshFooterCreator { context: Context?, layout: RefreshLayout? ->
+        SmartRefreshLayout.setDefaultRefreshFooterCreator { context: Context?, _: RefreshLayout? ->
             ClassicsFooter(context)
-                .setSpinnerStyle(SpinnerStyle.Translate)
-                .setTextSizeTitle(13f)
-                .setDrawableArrowSize(15f)
-                .setDrawableProgressSize(15f)
-                .setDrawableMarginRight(10f)
-                .setFinishDuration(0)
+                    .setSpinnerStyle(SpinnerStyle.Translate)
+                    .setTextSizeTitle(13f)
+                    .setDrawableArrowSize(15f)
+                    .setDrawableProgressSize(15f)
+                    .setDrawableMarginRight(10f)
+                    .setFinishDuration(0)
         }
     }
 

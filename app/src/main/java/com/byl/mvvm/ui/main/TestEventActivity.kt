@@ -1,8 +1,7 @@
 package com.byl.mvvm.ui.main
 
-
-import com.byl.mvvm.App
 import com.byl.mvvm.databinding.ActivityTestEventBinding
+import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ui.base.BaseActivity
@@ -19,7 +18,7 @@ class TestEventActivity : BaseActivity<BaseViewModel, ActivityTestEventBinding>(
 
     override fun initClick() {
         v.btn.clicks {
-            App.post(EventMessage(EventCode.REFRESH))
+            Event.post(EventMessage(EventCode.REFRESH))
         }
     }
 
