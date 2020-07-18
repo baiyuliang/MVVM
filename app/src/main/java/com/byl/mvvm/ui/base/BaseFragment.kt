@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -70,7 +69,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
         return contentView
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isViewCreated = true
@@ -79,11 +78,11 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     private fun init() {
         EventBus.getDefault().register(this)
-        //loading
+        // loading
         vm.isShowLoading.observe(this, Observer {
             if (it) showLoading() else dismissLoding()
         })
-        //错误信息
+        // 错误信息
         vm.errorData.observe(this, Observer {
             if (it.show) ToastUtil.showToast(mContext, it.errMsg)
             errorResult(it)
@@ -95,7 +94,9 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         EventBus.getDefault().unregister(this)
     }
 
-    //事件传递
+    /**
+     * 事件传递
+     */
     @Subscribe
     fun onEventMainThread(msg: EventMessage) {
         handleEvent(msg)
@@ -147,7 +148,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog(mContext)
         }
-        loadingDialog!!.show()
+        loadingDialog?.show()
     }
 
     private fun dismissLoding() {
@@ -164,7 +165,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
      * 接口请求错误回调
      */
     open fun errorResult(errorResult: ErrorResult) {}
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         contentView = null

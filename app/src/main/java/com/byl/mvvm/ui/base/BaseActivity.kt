@@ -1,16 +1,10 @@
 package com.byl.mvvm.ui.base
 
-import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -27,6 +21,7 @@ import java.lang.reflect.ParameterizedType
 
 
 abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
+
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM
     lateinit var v: VB
@@ -55,7 +50,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         initClick()
         initData()
         initVM()
-        LogUtil.e(getClassName());
+        LogUtil.e(getClassName())
     }
 
     /**
@@ -76,7 +71,9 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         EventBus.getDefault().unregister(this)
     }
 
-    //事件传递
+    /**
+     * 事件传递
+     */
     @Subscribe
     fun onEventMainThread(msg: EventMessage) {
         handleEvent(msg)
@@ -101,11 +98,11 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
     private fun init() {
         EventBus.getDefault().register(this)
-        //loading
+        // loading
         vm.isShowLoading.observe(this, Observer {
             if (it) showLoading() else dismissLoading()
         })
-        //错误信息
+        // 错误信息
         vm.errorData.observe(this, Observer {
             if (it.show) ToastUtil.showToast(mContext, it.errMsg)
             errorResult(it)
@@ -116,7 +113,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog(this)
         }
-        loadingDialog!!.show()
+        loadingDialog?.show()
     }
 
     fun dismissLoading() {
