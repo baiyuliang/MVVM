@@ -21,20 +21,19 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun initView() {
         list = ArrayList()
         adapter = ArticleListAdapter(mContext, list!!)
-        adapter!!.itemClick {
+        adapter?.itemClick {
             startActivity(Intent(mContext, TestEventActivity::class.java))
         }
         v.mRecyclerView.layoutManager = LinearLayoutManager(mContext)
         v.mRecyclerView.adapter = adapter
 
-        vm.getArticleList(page, true)
-
+        v.refreshLayout.autoRefresh()
         v.refreshLayout.setOnRefreshListener {//下拉刷新
             page = 0
-            vm.getArticleList(page,false)
+            vm.getArticleList(page, true)
         }
         v.refreshLayout.setOnLoadMoreListener {//上拉加载
-            vm.getArticleList(++page,false)
+            vm.getArticleList(++page, true)
         }
     }
 
@@ -48,11 +47,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun initVM() {
         vm.articlesData.observe(this, Observer {
-            v.refreshLayout.finishRefresh()
-            v.refreshLayout.finishLoadMore()
-            if (page == 0) list!!.clear()
-            it.datas?.let { it1 -> list!!.addAll(it1) }
-            adapter!!.notifyDataSetChanged()
+            if (page == 0) list?.clear()
+            it.datas?.let { it1 -> list?.addAll(it1) }
+            adapter?.notifyDataSetChanged()
         })
     }
 
@@ -64,7 +61,19 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         if (msg.code == EventCode.REFRESH) {
             ToastUtil.showToast(mContext, "主页：刷新")
             page = 0
-            vm.getArticleList(page,false)
+            vm.getArticleList(page, true)
         }
     }
+
+    override fun showLoading() {
+    }
+
+    override fun dismissLoading() {
+        if (page == 0) {
+            v.refreshLayout.finishRefresh()
+        } else {
+            v.refreshLayout.finishLoadMore()
+        }
+    }
+
 }

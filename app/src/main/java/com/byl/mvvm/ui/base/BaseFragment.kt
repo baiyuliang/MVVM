@@ -80,7 +80,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         EventBus.getDefault().register(this)
         // loading
         vm.isShowLoading.observe(this, Observer {
-            if (it) showLoading() else dismissLoding()
+            if (it) showLoading() else dismissLoading()
         })
         // 错误信息
         vm.errorData.observe(this, Observer {
@@ -144,14 +144,14 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     //需要懒加载的数据，重写此方法
     abstract fun lazyLoadData()
 
-    private fun showLoading() {
+    open fun showLoading() {
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog(mContext)
         }
         loadingDialog?.show()
     }
 
-    private fun dismissLoding() {
+    open fun dismissLoading() {
         loadingDialog?.dismiss()
         loadingDialog = null
     }
