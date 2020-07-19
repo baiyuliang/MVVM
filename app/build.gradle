@@ -65,6 +65,7 @@ dependencies {
     final RETROFIT_VERSION = '2.8.1'
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
 
     //网络请求cookie缓存
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
@@ -78,5 +79,6 @@ dependencies {
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation "com.orhanobut:logger:2.2.0"
 
 }

@@ -2,6 +2,7 @@ package com.byl.mvvm
 
 import android.app.Application
 import android.content.Context
+import com.byl.mvvm.utils.LogUtil
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle
@@ -21,6 +22,8 @@ class App : Application() {
         super.onCreate()
         instance = this
         DEBUG = true
+
+        LogUtil.init(BuildConfig.DEBUG)
     }
 
     init {

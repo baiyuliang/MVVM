@@ -1,29 +1,66 @@
 package com.byl.mvvm.utils
 
-import android.util.Log
-import com.byl.mvvm.BuildConfig
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 
+/**
+ * Log 日志工具，封装 logger
+ *
+ * @author lishide
+ * @date 2020/7/19
+ */
 object LogUtil {
-    private const val TAG = "mvvm_log"
-    private const val TAG_NET = "mvvm_net"
-
-    fun i(message: String?) {
-        if (BuildConfig.DEBUG) Log.i(TAG, message)
+    /**
+     * 初始化log工具，在app入口处调用
+     *
+     * @param isLogEnable 是否打印log
+     */
+    fun init(isLogEnable: Boolean) {
+        Logger.addLogAdapter(object : AndroidLogAdapter() {
+            override fun isLoggable(priority: Int, tag: String?): Boolean {
+                return isLogEnable
+            }
+        })
     }
 
-    fun e(message: String?) {
-        if (BuildConfig.DEBUG) Log.e(TAG, message)
+    fun d(message: String, vararg args: Any?) {
+        Logger.d(message, *args)
     }
 
-    fun showHttpHeaderLog(message: String?) {
-        if (BuildConfig.DEBUG) Log.d(TAG_NET, message)
+    fun d(any: Any?) {
+        Logger.d(any)
     }
 
-    fun showHttpApiLog(message: String?) {
-        if (BuildConfig.DEBUG) Log.w(TAG_NET, message)
+    fun e(message: String, vararg args: Any?) {
+        Logger.e(null, message, *args)
     }
 
-    fun showHttpLog(message: String?) {
-        if (BuildConfig.DEBUG) Log.i(TAG_NET, message)
+    fun e(throwable: Throwable?, message: String, vararg args: Any?) {
+        Logger.e(throwable, message, *args)
     }
+
+    fun i(message: String, vararg args: Any?) {
+        Logger.i(message, *args)
+    }
+
+    fun v(message: String, vararg args: Any?) {
+        Logger.v(message, *args)
+    }
+
+    fun w(message: String, vararg args: Any?) {
+        Logger.w(message, *args)
+    }
+
+    fun wtf(message: String, vararg args: Any?) {
+        Logger.wtf(message, *args)
+    }
+
+    fun json(json: String?) {
+        Logger.json(json)
+    }
+
+    fun xml(xml: String?) {
+        Logger.xml(xml)
+    }
+
 }

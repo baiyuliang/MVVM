@@ -50,7 +50,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         initClick()
         initData()
         initVM()
-        LogUtil.e(getClassName())
+        LogUtil.i(getClassName())
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         handleEvent(msg)
     }
 
-    open fun getClassName(): String? {
+    open fun getClassName(): String {
         val className = "BaseActivity"
         try {
             return javaClass.name

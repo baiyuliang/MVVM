@@ -64,7 +64,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
             initClick()
             initData()
             initVM()
-            LogUtil.e(getClassName())
+            LogUtil.i(getClassName())
         }
 
         return contentView
@@ -102,7 +102,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         handleEvent(msg)
     }
 
-    open fun getClassName(): String? {
+    open fun getClassName(): String {
         val className = "BaseFragment"
         try {
             return javaClass.name
