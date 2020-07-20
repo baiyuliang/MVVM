@@ -12,10 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
+import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.utils.LogUtil
 import com.byl.mvvm.utils.ToastUtil
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
@@ -53,9 +53,9 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         if (null == contentView) {
             contentView = v.root
@@ -77,7 +77,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     }
 
     private fun init() {
-        EventBus.getDefault().register(this)
+        Event.register(this)
         // loading
         vm.isShowLoading.observe(this, Observer {
             if (it) showLoading() else dismissLoading()
@@ -91,7 +91,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        Event.unregister(this)
     }
 
     /**

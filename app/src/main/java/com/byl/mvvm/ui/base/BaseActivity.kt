@@ -11,11 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
+import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.utils.LogUtil
 import com.byl.mvvm.utils.ToastUtil
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
@@ -68,7 +68,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        Event.unregister(this)
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     abstract fun initVM()
 
     private fun init() {
-        EventBus.getDefault().register(this)
+        Event.register(this)
         // loading
         vm.isShowLoading.observe(this, Observer {
             if (it) showLoading() else dismissLoading()
