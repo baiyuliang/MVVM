@@ -1,6 +1,5 @@
 package com.byl.mvvm.ui.base
 
-import android.app.ProgressDialog
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
@@ -15,6 +14,7 @@ import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
+import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.utils.Logg
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
@@ -26,7 +26,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     lateinit var vm: VM
     lateinit var v: VB
 
-    private var loadingDialog: ProgressDialog? = null
+    private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,15 +110,11 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     }
 
     override fun showLoading() {
-        if (loadingDialog == null) {
-            loadingDialog = ProgressDialog(this)
-        }
-        loadingDialog?.show()
+        mLoading.showLoading()
     }
 
     override fun dismissLoading() {
-        loadingDialog?.dismiss()
-        loadingDialog = null
+        mLoading.dismiss()
     }
 
     override fun showMessage(message: String) {

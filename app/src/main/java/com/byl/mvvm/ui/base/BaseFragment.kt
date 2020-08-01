@@ -1,6 +1,5 @@
 package com.byl.mvvm.ui.base
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +14,7 @@ import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
+import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.utils.Logg
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
@@ -26,7 +26,8 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
     var contentView: View? = null
     lateinit var vm: VM
     lateinit var v: VB
-    private var loadingDialog: ProgressDialog? = null
+
+    private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
     //Fragment的View加载完毕的标记
     private var isViewCreated = false
@@ -145,15 +146,11 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
     abstract fun lazyLoadData()
 
     override fun showLoading() {
-        if (loadingDialog == null) {
-            loadingDialog = ProgressDialog(mContext)
-        }
-        loadingDialog?.show()
+        mLoading.showLoading()
     }
 
     override fun dismissLoading() {
-        loadingDialog?.dismiss()
-        loadingDialog = null
+        mLoading.dismiss()
     }
 
     override fun showMessage(message: String) {
