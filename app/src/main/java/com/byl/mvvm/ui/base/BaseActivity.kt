@@ -14,13 +14,13 @@ import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
+import com.byl.mvvm.ext.toast
 import com.byl.mvvm.utils.Logg
-import com.byl.mvvm.utils.ToastUtil
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity(), IView {
 
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM
@@ -104,21 +104,29 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         })
         // 错误信息
         vm.errorData.observe(this, Observer {
-            if (it.show) ToastUtil.showToast(mContext, it.errMsg)
+            if (it.show) mContext.toast(it.errMsg)
             errorResult(it)
         })
     }
 
-    open fun showLoading() {
+    override fun showLoading() {
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog(this)
         }
         loadingDialog?.show()
     }
 
-    open fun dismissLoading() {
+    override fun dismissLoading() {
         loadingDialog?.dismiss()
         loadingDialog = null
+    }
+
+    override fun showMessage(message: String) {
+        mContext.toast(message)
+    }
+
+    override fun close() {
+        finish()
     }
 
     /**

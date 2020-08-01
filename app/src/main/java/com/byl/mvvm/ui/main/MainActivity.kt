@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.byl.mvvm.databinding.ActivityMainBinding
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
+import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.base.BaseActivity
 import com.byl.mvvm.ui.main.adapter.ArticleListAdapter
 import com.byl.mvvm.ui.main.model.ArticleBean
-import com.byl.mvvm.utils.ToastUtil
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun handleEvent(msg: EventMessage) {
         super.handleEvent(msg)
         if (msg.code == EventCode.REFRESH) {
-            ToastUtil.showToast(mContext, "主页：刷新")
+            mContext.toast("主页：刷新")
             page = 0
             vm.getArticleList(page, true)
         }

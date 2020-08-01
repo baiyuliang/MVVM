@@ -14,13 +14,13 @@ import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventMessage
+import com.byl.mvvm.ext.toast
 import com.byl.mvvm.utils.Logg
-import com.byl.mvvm.utils.ToastUtil
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), IView {
 
     lateinit var mContext: FragmentActivity
     var contentView: View? = null
@@ -84,7 +84,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         })
         // 错误信息
         vm.errorData.observe(this, Observer {
-            if (it.show) ToastUtil.showToast(mContext, it.errMsg)
+            if (it.show) mContext.toast(it.errMsg)
             errorResult(it)
         })
     }
@@ -144,16 +144,20 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     //需要懒加载的数据，重写此方法
     abstract fun lazyLoadData()
 
-    open fun showLoading() {
+    override fun showLoading() {
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog(mContext)
         }
         loadingDialog?.show()
     }
 
-    open fun dismissLoading() {
+    override fun dismissLoading() {
         loadingDialog?.dismiss()
         loadingDialog = null
+    }
+
+    override fun showMessage(message: String) {
+        mContext.toast(message)
     }
 
     /**
