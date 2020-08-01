@@ -106,20 +106,20 @@ vm.articlesData.observe(this, Observer {//返回结果
 本项目中，像 EventBus 的注册与注销，以及消息接收全部放在了 BaseActivity 中，并提供了一个对外的消息处理方法，利用消息 Code 来区分不同消息，在需要使用消息的界面，重写该方法即可：
 
 ```kotlin
-    // 发送消息：
-    Event.post(EventMessage(EventCode.REFRESH))
+// 发送消息：
+Event.post(EventMessage(EventCode.REFRESH))
 
-    /**
-     * 接收消息
-     */
-    override fun handleEvent(msg: EventMessage) {
-        super.handleEvent(msg)
-        if (msg.code == EventCode.REFRESH) {
-            ToastUtil.showToast(mContext, "主页：刷新")
-            page = 0
-            vm.getArticleList(page, false)
-        }
+/**
+ * 接收消息
+ */
+override fun handleEvent(msg: EventMessage) {
+    super.handleEvent(msg)
+    if (msg.code == EventCode.REFRESH) {
+        showMessage("主页：刷新")
+        page = 0
+        vm.getArticleList(page, false)
     }
+}
 ```
 
 这样做的好处是：
@@ -143,33 +143,33 @@ vm.articlesData.observe(this, Observer {//返回结果
 另附上文件上传案例代码，需要时以作参考：
 
 ```kotlin
-    fun uploadFile(path: String) {
-        val file = File(path)
-        val map: HashMap<String, RequestBody> = LinkedHashMap()
-        val requestBody: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
-        map["file\"; filename=\"" + file.name] = requestBody//file为后台规定参数
-        map["name"] = RequestBody.create(MediaType.parse("text/plain"), file.name)
-        map["arg1"] = RequestBody.create(MediaType.parse("text/plain"), "arg1")//普通参数
-        map["arg2"] = RequestBody.create(MediaType.parse("text/plain"), "arg2")
+fun uploadFile(path: String) {
+    val file = File(path)
+    val map: HashMap<String, RequestBody> = LinkedHashMap()
+    val requestBody: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
+    map["file\"; filename=\"" + file.name] = requestBody//file为后台规定参数
+    map["name"] = RequestBody.create(MediaType.parse("text/plain"), file.name)
+    map["arg1"] = RequestBody.create(MediaType.parse("text/plain"), "arg1")//普通参数
+    map["arg2"] = RequestBody.create(MediaType.parse("text/plain"), "arg2")
 
-        //签名（根据服务器规则）
-        val params = LinkedHashMap<String, String?>()
-        params["name"] = file.name
-        params["arg1"] = "arg1"
-        params["arg2"] = "arg2"
-        val sign: String = getSign(params)
-        map["sign"] = RequestBody.create(MediaType.parse("text/plain"), sign)
+    //签名（根据服务器规则）
+    val params = LinkedHashMap<String, String?>()
+    params["name"] = file.name
+    params["arg1"] = "arg1"
+    params["arg2"] = "arg2"
+    val sign: String = getSign(params)
+    map["sign"] = RequestBody.create(MediaType.parse("text/plain"), sign)
 
-        launch({ httpUtil.upLoadFile(map) }, uploadData)
-     }
+    launch({ httpUtil.upLoadFile(map) }, uploadData)
+ }
 ```
 
 ApiService:
 
 ```kotlin
-    @Multipart
-    @POST("/upload")
-    suspend fun upLoadFile(@PartMap map: HashMap<String, RequestBody>): BaseResult<UploadModel>
+@Multipart
+@POST("/upload")
+suspend fun upLoadFile(@PartMap map: HashMap<String, RequestBody>): BaseResult<UploadModel>
 ```
 
 ### 2020.06.15

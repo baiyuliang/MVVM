@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun handleEvent(msg: EventMessage) {
         super.handleEvent(msg)
         if (msg.code == EventCode.REFRESH) {
-            mContext.toast("主页：刷新")
+            showMessage("主页：刷新")
             page = 0
             vm.getArticleList(page, true)
         }
