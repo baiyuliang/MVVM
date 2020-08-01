@@ -32,16 +32,24 @@ open class BaseViewModel : ViewModel() {
         errorData.value = error
     }
 
+    fun showError(msg: String) {
+        val errorResult = ErrorResult()
+        errorResult.show = true
+        errorResult.errMsg = msg
+        showError(errorResult)
+    }
+
     /**
      * 请求接口，可定制是否显示 loading 和错误提示
      *
      * @param block  请求接口方法，T 表示 data 实体泛型，调用时可将 data 对应的 bean 传入即可
      */
     fun <T> launch(
-        block: suspend CoroutineScope.() -> BaseResult<T>,
-        liveData: MutableLiveData<T>,
-        isShowLoading: Boolean = false,
-        isShowError: Boolean = true
+            block: suspend CoroutineScope.() -> BaseResult<T>,
+            liveData: MutableLiveData<T>,
+            isShowLoading: Boolean = true,
+            isShowError: Boolean = true,
+            apiIndex: Int = 0
     ) {
         if (isShowLoading) showLoading()
         viewModelScope.launch {
@@ -52,12 +60,12 @@ open class BaseViewModel : ViewModel() {
                     liveData.value = result.data
                 } else {
                     Logg.e("请求错误>>" + result.errorMsg)
-                    showError(ErrorResult(result.errorCode, result.errorMsg, isShowError))
+                    showError(ErrorResult(result.errorCode, result.errorMsg, isShowError, apiIndex))
                 }
             } catch (e: Throwable) {
                 // 接口请求失败
                 Logg.e("请求异常>>" + e.message)
-                val errorResult = ErrorUtil.getError(e)
+                val errorResult = ErrorUtil.getError(apiIndex, e)
                 errorResult.show = isShowError
                 showError(errorResult)
             } finally {
