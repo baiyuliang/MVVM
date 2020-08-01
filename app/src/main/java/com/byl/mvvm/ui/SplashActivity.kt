@@ -11,7 +11,6 @@ import com.byl.mvvm.databinding.ActivitySplashBinding
 import com.byl.mvvm.ui.base.BaseActivity
 import com.byl.mvvm.ui.base.BaseViewModel
 import com.byl.mvvm.ui.main.MainActivity
-import com.byl.mvvm.utils.LogUtil
 import com.byl.mvvm.utils.StatusBarUtil
 import com.byl.mvvm.utils.SysUtils
 

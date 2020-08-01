@@ -5,10 +5,10 @@ import com.byl.mvvm.BuildConfig
 import com.byl.mvvm.api.ApiService
 import com.byl.mvvm.api.URLConstant
 import com.byl.mvvm.utils.JsonUtil
+import com.byl.mvvm.utils.Logg
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
-import com.orhanobut.logger.Logger
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -83,7 +83,7 @@ class RetrofitClient {
                 append(msg + "\n")
                 // 响应结束，打印整条日志
                 if (msg.startsWith("<-- END HTTP")) {
-                    Logger.d(toString())
+                    Logg.d(toString())
                     hashMap.remove(threadId)
                 }
             }

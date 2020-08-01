@@ -14,7 +14,7 @@ import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.utils.LogUtil
+import com.byl.mvvm.utils.Logg
 import com.byl.mvvm.utils.ToastUtil
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
@@ -59,12 +59,12 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     ): View? {
         if (null == contentView) {
             contentView = v.root
+            Logg.i(getClassName())
             init()
             initView()
             initClick()
             initData()
             initVM()
-            LogUtil.i(getClassName())
         }
 
         return contentView

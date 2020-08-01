@@ -9,7 +9,7 @@ import com.orhanobut.logger.Logger
  * @author lishide
  * @date 2020/7/19
  */
-object LogUtil {
+object Logg {
     /**
      * 初始化log工具，在app入口处调用
      *

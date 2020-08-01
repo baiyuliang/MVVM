@@ -7,7 +7,7 @@ import com.byl.mvvm.api.HttpUtil
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.api.error.ErrorUtil
 import com.byl.mvvm.api.response.BaseResult
-import com.byl.mvvm.utils.LogUtil
+import com.byl.mvvm.utils.Logg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,12 +51,12 @@ open class BaseViewModel : ViewModel() {
                     // 请求成功
                     liveData.value = result.data
                 } else {
-                    LogUtil.e("请求错误>>" + result.errorMsg)
+                    Logg.e("请求错误>>" + result.errorMsg)
                     showError(ErrorResult(result.errorCode, result.errorMsg, isShowError))
                 }
             } catch (e: Throwable) {
                 // 接口请求失败
-                LogUtil.e("请求异常>>" + e.message)
+                Logg.e("请求异常>>" + e.message)
                 val errorResult = ErrorUtil.getError(e)
                 errorResult.show = isShowError
                 showError(errorResult)

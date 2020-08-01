@@ -14,7 +14,7 @@ import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.Event
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.utils.LogUtil
+import com.byl.mvvm.utils.Logg
 import com.byl.mvvm.utils.ToastUtil
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
@@ -45,12 +45,12 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         setContentView(v.root)
 
         mContext = this
+        Logg.i(getClassName())
         init()
         initView()
         initClick()
         initData()
         initVM()
-        LogUtil.i(getClassName())
     }
 
     /**
