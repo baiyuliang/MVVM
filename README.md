@@ -163,3 +163,14 @@ ApiService:
         super.onDestroyView()
         contentView = null
     }
+    
+## 2020.08.31
+
+关于BaseAdapter，这里解释下原来的说明，为什么recycleview高度要设置为wrap？
+
+由于item的ViewBindding也是通过反射得到，但得到后itemView的宽高会自动被系统设为wrap，所以这里需要重新赋值宽高，之前的做法是将父容器宽高给了item，这里有问题，item的父容器就是RecyclerView，所以如果RecyclerView设置了宽高后，item显示就出问题了，因此，现在修改为item重置自身宽高，宽度match_parent，高度wrap_content，此时就要注意，item的最外层父布局的的宽高同样为match_parent和wrap_content，这适用于大多数item的布局，如果确实有需求要对item设置固定宽高，建议在子Adapter中通过代码动态设置宽高！
+
+     vb.root.layoutParams = RecyclerView.LayoutParams(
+            RecyclerView.LayoutParams.MATCH_PARENT,
+            RecyclerView.LayoutParams.WRAP_CONTENT
+        )
