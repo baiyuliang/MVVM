@@ -174,3 +174,25 @@ ApiService:
             RecyclerView.LayoutParams.MATCH_PARENT,
             RecyclerView.LayoutParams.WRAP_CONTENT
         )
+
+## 2020.9.23 简化Adapter
+
+子Adapter继承BaseAdapter，不需要再强转ViewBinding了：
+
+BaseAdapter：
+
+        override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        convert(holder.v as VB, listDatas[position], position)
+    }
+
+    abstract fun convert(v: VB, t: T, position: Int)
+
+子类Adapter：
+
+        override fun convert(v: ItemArticleBinding, t: ArticleBean, position: Int) {
+        Glide.with(mContext).load(t.envelopePic).into(v.ivCover)
+        v.tvTitle.text = t.title
+        v.tvDes.text = t.desc
+    }
+    
+直接传入item对应的ViewBinding对象，更加简单便捷！
