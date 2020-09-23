@@ -9,36 +9,20 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 ## 本框架的特点：  
 
-1.使用Kotlin语言，减少代码量
+1.使用Kotlin语言
 
 2.使用MVVM+协程开发模式，相较于常用的MVP+RXJava开发模式，会减省大量的MvpView的创建及大量的接口回调，并且不再需要Presenter的注册和注销，减少内存泄漏风险 
  
-3.ViewBinding（根据xml自动生成）将会使你不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
+3.ViewBinding（根据xml自动生成），你将不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
 
-4.关于消息传递，github上有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性  
+4.关于消息传递，github上有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，但优缺点，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性  
 
 ## Example
 
-## 编写Activity（只需要传入对应的ViewModel和ViewBinding即可，abstract方法自定义）：
+## 编写Activity（只需要传入对应的ViewModel和ViewBinding即可）：
 
-    class TestActivity : BaseActivity<BaseViewModel, ActivityTestBinding>() {
+    class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
     
-    
-        override fun initView() {
-    
-        }
-    
-        override fun initClick() {
-         
-        }
-    
-        override fun initData() {
-    
-        }
-    
-        override fun initVM() {
-    
-        }
     
     }
 
@@ -109,7 +93,7 @@ Fragment同！
 
 2：可以随时更换消息传递框架，方便快捷；
 
-当然，缺点就是发送一个消息，所有活动界面都会收到，个人认为利大于弊，弊则可以忽略
+当然，缺点，只有一个，就是发送消息所有活动界面都会收到，但这个缺点并未有任何影响，相对于上面提到的优点，完全可以忽略！
 
 该框架已应用到自己公司项目中，运行良好，如果后续发现有坑的地方，会及时更新！
 
