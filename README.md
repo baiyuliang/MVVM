@@ -15,7 +15,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
  
 3.ViewBinding（根据xml自动生成），你将不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
 
-4.关于消息传递，github上有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，但优缺点，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性  
+4.关于消息传递，github上有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，但有缺点，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性  
 
 ## Example
 
