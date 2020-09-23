@@ -49,16 +49,13 @@ Fragment同！
     class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
         BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
     
-        override fun convert(holder: BaseViewHolder, t: ArticleBean, position: Int) {
-            val v = holder.v as ItemArticleBinding
+        override fun convert(v: ItemArticleBinding, t: ArticleBean, position: Int) {
             Glide.with(mContext).load(t.envelopePic).into(v.ivCover)
             v.tvTitle.text = t.title
             v.tvDes.text = t.desc
         }
     
     }
-    
-一个convert方法解决，注意 val v = holder.v as ItemArticleBinding必须写！
 
 ## 添加接口（ApiService）:
 
