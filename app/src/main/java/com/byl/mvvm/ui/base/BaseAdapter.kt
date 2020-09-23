@@ -39,10 +39,10 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
             true
         }
 
-        convert(holder, listDatas[position], position)
+        convert(holder.vb as VB, listDatas[position], position)
     }
 
-    abstract fun convert(holder: BaseViewHolder, t: T, position: Int)
+    abstract fun convert(vb: VB, t: T, position: Int)
 
     override fun getItemCount(): Int {
         return listDatas.size
