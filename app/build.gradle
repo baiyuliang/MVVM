@@ -57,12 +57,12 @@ dependencies {
 
 
     //glide图片加载框架
-    final GLIDE_VERSION = '4.11.0'
+    final GLIDE_VERSION = '4.12.0'
     implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
     implementation "com.github.bumptech.glide:okhttp3-integration:$GLIDE_VERSION"
 
     //网络请求框架
-    final RETROFIT_VERSION = '2.8.1'
+    final RETROFIT_VERSION = '2.9.0'
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
