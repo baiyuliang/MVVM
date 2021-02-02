@@ -14,9 +14,9 @@ interface IView {
     /**
      * 显示信息
      *
-     * @param message 消息内容, 不能为 `null`
+     * @param message 消息内容
      */
-    fun showMessage(message: String) {}
+    fun showMessage(message: String?) {}
 
     /**
      * 关闭页面

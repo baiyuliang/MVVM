@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.byl.mvvm.databinding.ActivityMainBinding
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.base.BaseActivity
 import com.byl.mvvm.ui.main.adapter.ArticleListAdapter
 import com.byl.mvvm.ui.main.model.ArticleBean

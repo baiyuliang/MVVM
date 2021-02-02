@@ -85,7 +85,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
         })
         // 错误信息
         vm.errorData.observe(this, Observer {
-            if (it.show) mContext.toast(it.errMsg)
+            if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })
     }
@@ -112,13 +112,13 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
         return className
     }
 
-    abstract fun initVM()
-
     abstract fun initView()
 
     abstract fun initClick()
 
     abstract fun initData()
+
+    abstract fun initVM()
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
@@ -153,7 +153,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
         mLoading.dismiss()
     }
 
-    override fun showMessage(message: String) {
+    override fun showMessage(message: String?) {
         mContext.toast(message)
     }
 

@@ -104,7 +104,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         })
         // 错误信息
         vm.errorData.observe(this, Observer {
-            if (it.show) mContext.toast(it.errMsg)
+            if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })
     }
@@ -117,12 +117,17 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         mLoading.dismiss()
     }
 
-    override fun showMessage(message: String) {
+    override fun showMessage(message: String?) {
         mContext.toast(message)
     }
 
     override fun close() {
         finish()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dismissLoading()
     }
 
     /**
