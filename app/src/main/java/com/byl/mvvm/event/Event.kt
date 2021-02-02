@@ -1,7 +1,7 @@
 package com.byl.mvvm.event
 
-import com.byl.mvvm.utils.Platform.DEPENDENCY_ANDROID_EVENTBUS
-import com.byl.mvvm.utils.Platform.DEPENDENCY_EVENTBUS
+import com.byl.mvvm.util.Platform.DEPENDENCY_ANDROID_EVENTBUS
+import com.byl.mvvm.util.Platform.DEPENDENCY_EVENTBUS
 import java.lang.reflect.Method
 
 /**

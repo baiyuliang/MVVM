@@ -2,7 +2,7 @@ package com.byl.mvvm
 
 import android.app.Application
 import android.content.Context
-import com.byl.mvvm.utils.Logg
+import com.byl.mvvm.util.Logg
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle

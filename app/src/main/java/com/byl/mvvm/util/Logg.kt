@@ -1,4 +1,4 @@
-package com.byl.mvvm.utils
+package com.byl.mvvm.util
 
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -11,9 +11,9 @@ import com.orhanobut.logger.Logger
  */
 object Logg {
     /**
-     * 初始化log工具，在app入口处调用
+     * 初始化 log 工具，在 app 入口处调用
      *
-     * @param isLogEnable 是否打印log
+     * @param isLogEnable 是否打印 log
      */
     fun init(isLogEnable: Boolean) {
         Logger.addLogAdapter(object : AndroidLogAdapter() {

@@ -1,4 +1,4 @@
-package com.byl.mvvm.utils
+package com.byl.mvvm.util
 
 import android.app.Activity
 import android.content.Context

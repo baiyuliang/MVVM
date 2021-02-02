@@ -1,4 +1,4 @@
-package com.byl.mvvm.utils;
+package com.byl.mvvm.util;
 
 import com.google.gson.Gson;
 
@@ -11,7 +11,7 @@ import okhttp3.RequestBody;
  * @author lishide
  * @date 2020/7/19
  */
-public class JsonUtil {
+public class JsonUtils {
 
     private static Gson gson = new Gson();
 

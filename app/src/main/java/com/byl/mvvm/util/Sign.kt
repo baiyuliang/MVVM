@@ -1,4 +1,4 @@
-package com.byl.mvvm.utils
+package com.byl.mvvm.util
 
 import java.net.URLEncoder
 import java.security.MessageDigest

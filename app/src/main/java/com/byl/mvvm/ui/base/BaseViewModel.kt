@@ -7,7 +7,7 @@ import com.byl.mvvm.api.HttpUtil
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.api.error.ErrorUtil
 import com.byl.mvvm.api.response.BaseResult
-import com.byl.mvvm.utils.Logg
+import com.byl.mvvm.util.Logg
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

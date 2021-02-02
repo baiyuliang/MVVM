@@ -15,7 +15,7 @@ import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.dialog.LoadingDialog
-import com.byl.mvvm.utils.Logg
+import com.byl.mvvm.util.Logg
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
