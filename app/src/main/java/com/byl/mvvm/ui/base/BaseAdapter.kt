@@ -10,11 +10,12 @@ import java.lang.reflect.ParameterizedType
 
 /**
  * 通过传入ViewBinding，不再需要写具体xml资源，省略onBindViewHolder中findviewById
- * 注意点：recyclerView高度应设为wrap_content
+ * 注意点：item的最外层布局高度要设为wrap_content，
+ * 如果item有需求要设置为固定宽高，可以在子类的convert方法里，通过代码设置
  */
 abstract class BaseAdapter<VB : ViewBinding, T>(
-    var mContext: Activity,
-    var listDatas: ArrayList<T>
+        var mContext: Activity,
+        var listDatas: ArrayList<T>
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -22,7 +23,10 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
         val clazz = type.actualTypeArguments[0] as Class<VB>
         val method = clazz.getMethod("inflate", LayoutInflater::class.java)
         var vb = method.invoke(null, LayoutInflater.from(mContext)) as VB
-        vb.root.layoutParams = parent.layoutParams
+        vb.root.layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT
+        )
         return BaseViewHolder(vb, vb.root)
     }
 
@@ -35,10 +39,10 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
             true
         }
 
-        convert(holder, listDatas[position], position)
+        convert(holder.v as VB, listDatas[position], position)
     }
 
-    abstract fun convert(holder: BaseViewHolder, t: T, position: Int)
+    abstract fun convert(v: VB, t: T, position: Int)
 
     override fun getItemCount(): Int {
         return listDatas.size
