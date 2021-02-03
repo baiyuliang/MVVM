@@ -2,24 +2,26 @@
 
 Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
+注意：使用ViewBinding需要AndroidStudio版本为4.0+
+
 项目框架整体架构图：
 
 ![架构图](https://img-blog.csdnimg.cn/20200601152544441.png)
 
 ## 本框架的特点
 
-1. 使用 Kotlin 语言，减少代码量；
+1. 使用 Kotlin 语言；
 
 2. 使用 MVVM + 协程开发模式，相较于常用的 MVP+RxJava 开发模式，会减省大量的 MvpView 的创建及大量的接口回调，并且不再需要 Presenter 的注册和注销，减少内存泄漏风险；
 
-3. ViewBinding（根据 xml 自动生成）将会使你不再需要进行 findViewById 的繁琐工作，比 ButterKnife 更加方便；
+3. ViewBinding（根据 xml 自动生成），你将不再需要进行 findViewById 的繁琐工作，比 ButterKnife 更加方便；
 
-4. 关于消息传递，GitHub 上有 LiveData 改造的 LiveDataBus，作用及使用方法都类似于 EventBus，而本项目选择继续使用 EventBus 的原因，则是因为 EventBus 的强大以及它的稳定性和灵活性； 
+4. 关于消息传递，GitHub 上有 LiveData 改造的 LiveDataBus，作用及使用方法都类似于 EventBus，但有缺点，而本项目选择继续使用 EventBus 的原因，则是因为 EventBus 的强大以及它的稳定性和灵活性；
 
 ## Example
 
 ### 编写 Activity
-只需要传入对应的 ViewModel 和 ViewBinding 即可，abstract 方法自定义。
+只需要传入对应的 ViewModel 和 ViewBinding 即可。
 
 ```kotlin
 class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
@@ -29,7 +31,7 @@ class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
     }
 
     override fun initClick() {
-     
+
     }
 
     override fun initData() {
@@ -52,10 +54,9 @@ Fragment 同！
 
 ```kotlin
 class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
-    BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
+        BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
 
-    override fun convert(holder: BaseViewHolder, t: ArticleBean, position: Int) {
-        val v = holder.v as ItemArticleBinding
+    override fun convert(v: ItemArticleBinding, t: ArticleBean, position: Int) {
         Glide.with(mContext).load(t.envelopePic).into(v.ivCover)
         v.tvTitle.text = t.title
         v.tvDes.text = t.desc
@@ -63,8 +64,6 @@ class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
 
 }
 ```
-
-一个 `convert` 方法解决，注意 `val v = holder.v as ItemArticleBinding` 必须写！
 
 ### 添加接口（ApiService）
 
@@ -128,9 +127,7 @@ override fun handleEvent(msg: EventMessage) {
 
 2. 可以随时更换消息传递框架，方便快捷；
 
-当然，缺点就是发送一个消息，所有活动界面都会收到，个人认为利大于弊，弊则可以忽略。
-
-
+当然，缺点，只有一个，就是发送消息所有活动界面都会收到，但这个缺点并未有任何影响，相对于上面提到的优点，完全可以忽略！
 
 该框架已应用到自己公司项目中，运行良好，如果后续发现有坑的地方，会及时更新！
 
@@ -193,3 +190,41 @@ override fun onDestroyView() {
 }
 ```
 
+## 2020.08.31
+
+关于 BaseAdapter，这里解释下原来的说明，为什么 recycleview 高度要设置为 wrap？
+
+由于 item 的 ViewBinding 也是通过反射得到，但得到后 itemView 的宽高会自动被系统设为 wrap，所以这里需要重新赋值宽高，之前的做法是将父容器宽高给了 item，这里有问题，item 的父容器就是 RecyclerView，所以如果 RecyclerView 设置了宽高后，item 显示就出问题了，因此，现在修改为 item 重置自身宽高，宽度 match_parent，高度 wrap_content，此时就要注意，item 的最外层父布局的的宽高同样为 match_parent 和 wrap_content，这适用于大多数 item 的布局，如果确实有需求要对 item 设置固定宽高，建议在子 Adapter 中通过代码动态设置宽高！
+
+```kotlin
+vb.root.layoutParams = RecyclerView.LayoutParams(
+        RecyclerView.LayoutParams.MATCH_PARENT,
+        RecyclerView.LayoutParams.WRAP_CONTENT
+        )
+```
+
+## 2020.9.23 简化 Adapter
+
+子 Adapter 继承 BaseAdapter，不需要再强转 ViewBinding 了：
+
+BaseAdapter：
+
+```kotlin
+override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    convert(holder.v as VB, listDatas[position], position)
+}
+
+abstract fun convert(v: VB, t: T, position: Int)
+```
+
+子类 Adapter：
+
+```kotlin
+override fun convert(v: ItemArticleBinding, t: ArticleBean, position: Int) {
+    Glide.with(mContext).load(t.envelopePic).into(v.ivCover)
+    v.tvTitle.text = t.title
+    v.tvDes.text = t.desc
+}
+```
+
+直接传入 item 对应的 ViewBinding 对象，更加简单便捷！
