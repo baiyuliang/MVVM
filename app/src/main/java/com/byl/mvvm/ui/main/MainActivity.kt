@@ -1,7 +1,6 @@
 package com.byl.mvvm.ui.main
 
 import android.content.Intent
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byl.mvvm.databinding.ActivityMainBinding
 import com.byl.mvvm.event.EventCode
@@ -45,7 +44,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun initVM() {
-        vm.articlesData.observe(this, Observer {
+        vm.articlesData.observe(this, {
             if (page == 0) list?.clear()
             it.datas?.let { it1 -> list?.addAll(it1) }
             adapter?.notifyDataSetChanged()

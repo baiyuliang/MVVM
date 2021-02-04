@@ -13,16 +13,6 @@ import okhttp3.RequestBody;
  */
 public class JsonUtils {
 
-    private static final Gson gson = new Gson();
-
-    public static <T> RequestBody getRequestBody(T bean) {
-        return RequestBody.create(MediaType.parse("application/json"), getBeanToString(bean));
-    }
-
-    public static <T> String getBeanToString(T bean) {
-        return gson.toJson(bean);
-    }
-
     /**
      * 格式化json字符串
      *

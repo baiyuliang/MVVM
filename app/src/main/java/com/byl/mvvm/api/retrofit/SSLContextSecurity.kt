@@ -13,13 +13,13 @@ object SSLContextSecurity {
         val trustAllCerts: Array<TrustManager> = arrayOf(object : X509TrustManager {
             @Throws(CertificateException::class)
             override fun checkClientTrusted(
-                chain: Array<java.security.cert.X509Certificate>, authType: String
+                chain: Array<X509Certificate>, authType: String
             ) {
             }
 
             @Throws(CertificateException::class)
             override fun checkServerTrusted(
-                chain: Array<java.security.cert.X509Certificate>,
+                chain: Array<X509Certificate>,
                 authType: String
             ) {
             }

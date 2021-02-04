@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
@@ -99,11 +98,11 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     private fun init() {
         Event.register(this)
         // loading
-        vm.isShowLoading.observe(this, Observer {
+        vm.isShowLoading.observe(this, {
             if (it) showLoading() else dismissLoading()
         })
         // 错误信息
-        vm.errorData.observe(this, Observer {
+        vm.errorData.observe(this, {
             if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })

@@ -2,7 +2,6 @@ package com.byl.mvvm.ext
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
