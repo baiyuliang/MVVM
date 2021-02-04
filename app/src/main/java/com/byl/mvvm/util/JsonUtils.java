@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
  */
 public class JsonUtils {
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public static <T> RequestBody getRequestBody(T bean) {
         return RequestBody.create(MediaType.parse("application/json"), getBeanToString(bean));

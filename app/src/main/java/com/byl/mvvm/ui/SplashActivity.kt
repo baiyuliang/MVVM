@@ -11,16 +11,12 @@ import com.byl.mvvm.databinding.ActivitySplashBinding
 import com.byl.mvvm.ui.base.BaseActivity
 import com.byl.mvvm.ui.base.BaseViewModel
 import com.byl.mvvm.ui.main.MainActivity
-import com.byl.mvvm.util.StatusBarUtil
-import com.byl.mvvm.util.SysUtils
 
 
 class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
 
 
     override fun initView() {
-        StatusBarUtil.immersive(this)
-        StatusBarUtil.darkMode(this)
         if (!this.isTaskRoot) {
             val mainIntent = intent
             val action = mainIntent.action
@@ -43,7 +39,6 @@ class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
     }
 
     private fun init() {
-        SysUtils.initFiles()
         Handler().postDelayed({
             startActivity(Intent(mContext, MainActivity::class.java))
             finish()

@@ -9,7 +9,7 @@ import javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory
 object SSLContextSecurity {
 
     fun createIgnoreVerifySSL(sslVersion: String): SSLSocketFactory {
-        var sc = SSLContext.getInstance(sslVersion);
+        var sc = SSLContext.getInstance(sslVersion)
         val trustAllCerts: Array<TrustManager> = arrayOf(object : X509TrustManager {
             @Throws(CertificateException::class)
             override fun checkClientTrusted(
@@ -34,8 +34,8 @@ object SSLContextSecurity {
         // Create all-trusting host name verifier
         val allHostsValid = HostnameVerifier { _, _ -> true }
 
-        setDefaultSSLSocketFactory(sc.socketFactory);
-        setDefaultHostnameVerifier(allHostsValid);
-        return sc.socketFactory;
+        setDefaultSSLSocketFactory(sc.socketFactory)
+        setDefaultHostnameVerifier(allHostsValid)
+        return sc.socketFactory
     }
 }
