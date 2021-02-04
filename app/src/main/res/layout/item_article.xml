@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -10,14 +11,14 @@
         android:background="?attr/selectableItemBackground"
         android:padding="10dp">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_cover"
             android:layout_width="80dp"
             android:layout_height="60dp"
             android:background="#F7F7F7"
             android:scaleType="centerCrop" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,11 +26,11 @@
             android:layout_toEndOf="@+id/iv_cover"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="#333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,9 +40,9 @@
             android:layout_toEndOf="@+id/iv_cover"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="#666666"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" />
     </RelativeLayout>
 
     <View
