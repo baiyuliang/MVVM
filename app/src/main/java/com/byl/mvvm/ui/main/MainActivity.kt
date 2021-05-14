@@ -48,11 +48,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun initVM() {
         vm.articlesData.observe(this, Observer {
-            v.refreshLayout.finishRefresh()
-            v.refreshLayout.finishLoadMore()
             if (page == 0) list!!.clear()
             it.datas?.let { it1 -> list!!.addAll(it1) }
             adapter!!.notifyDataSetChanged()
+        })
+        vm.isShowLoading.observe(this, Observer {
+            if(!it){
+                v.refreshLayout.finishRefresh()
+                v.refreshLayout.finishLoadMore()
+            }
         })
     }
 
