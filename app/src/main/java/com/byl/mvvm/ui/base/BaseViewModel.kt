@@ -1,6 +1,7 @@
 package com.byl.mvvm.ui.base
 
 import android.app.Activity
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.viewbinding.ViewBinding
@@ -11,23 +12,29 @@ import com.byl.mvvm.api.response.BaseResult
 import com.byl.mvvm.utils.LogUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.lang.reflect.ParameterizedType
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel<VB : ViewBinding> : ViewModel() {
 
     private val AUTH_SECRET = "123456"//前后台协议密钥
     val httpUtil by lazy { HttpUtil.getInstance().getService() }
     var isShowLoading = MutableLiveData<Boolean>()//是否显示loading
     var errorData = MutableLiveData<ErrorResult>()//错误信息
+    lateinit var vb: VB
 
-    open fun observe(activity: Activity, owner: LifecycleOwner,viewBinding: ViewBinding) {
+    fun binding(vb: VB) {
+        this.vb = vb
+    }
+
+    open fun observe(activity: Activity, owner: LifecycleOwner) {
 
     }
 
-    open fun observe(fragment: Fragment, owner: LifecycleOwner,viewBinding: ViewBinding) {
+    open fun observe(fragment: Fragment, owner: LifecycleOwner) {
 
     }
 

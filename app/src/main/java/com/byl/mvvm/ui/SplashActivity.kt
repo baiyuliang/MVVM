@@ -16,7 +16,7 @@ import com.byl.mvvm.utils.StatusBarUtil
 import com.byl.mvvm.utils.SysUtils
 
 
-class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
+class SplashActivity : BaseActivity<BaseViewModel<ActivitySplashBinding>, ActivitySplashBinding>() {
 
 
     override fun initView() {

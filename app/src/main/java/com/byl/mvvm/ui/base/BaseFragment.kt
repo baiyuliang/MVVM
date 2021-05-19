@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.event.EventMessage
+import com.byl.mvvm.utils.GenericParadigmUtil
 import com.byl.mvvm.utils.LogUtil
 import com.byl.mvvm.utils.ToastUtil
 import org.greenrobot.eventbus.EventBus
@@ -21,7 +22,7 @@ import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
 
-abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment() {
 
     lateinit var mContext: FragmentActivity
     var contentView: View? = null
@@ -29,27 +30,31 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     lateinit var vb: VB
     private var loadingDialog: ProgressDialog? = null
 
+    //Fragment的View加载完毕的标记
     private var isViewCreated = false
+
+    //Fragment对用户可见的标记
     private var isUIVisible = false
     var isVisibleToUser = false
-
-
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = context as FragmentActivity
 
-        //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
-        val type = javaClass.genericSuperclass as ParameterizedType
-        val clazz1 = type.actualTypeArguments[0] as Class<VM>
-        vm = ViewModelProvider(this).get(clazz1)
+        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        vm = ViewModelProvider(this).get(clazzVM)
 
-        val clazz2 = type.actualTypeArguments[1] as Class<VB>
-        val method = clazz2.getMethod("inflate", LayoutInflater::class.java)
+        pathfinders = ArrayList()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
         vb = method.invoke(null, layoutInflater) as VB
 
-        vm.observe(this, this, vb)
+        vm.binding(vb)
+        vm.observe(this, this)
 
     }
 

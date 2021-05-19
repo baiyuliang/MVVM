@@ -10,7 +10,7 @@ import com.byl.mvvm.ui.base.BaseViewModel
 import com.byl.mvvm.ui.main.MainActivity
 import com.byl.mvvm.ui.main.model.ArticleListBean
 
-class MainActivityViewModel : BaseViewModel() {
+class MainActivityViewModel : BaseViewModel<ActivityMainBinding>() {
 
     var articlesData = MutableLiveData<ArticleListBean>()
 
@@ -18,9 +18,8 @@ class MainActivityViewModel : BaseViewModel() {
         launch({ httpUtil.getArticleList(page) }, articlesData, isShowLoading)
     }
 
-    override fun observe(activity: Activity, owner: LifecycleOwner, viewBinding: ViewBinding) {
+    override fun observe(activity: Activity, owner: LifecycleOwner) {
         val mContext = activity as MainActivity
-        val vb = viewBinding as ActivityMainBinding
         articlesData.observe(owner, Observer {
             vb.refreshLayout.finishRefresh()
             vb.refreshLayout.finishLoadMore()

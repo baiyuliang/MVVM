@@ -14,7 +14,7 @@ import java.util.*
 
 
 class TestEventActivity :
-    BaseActivity<BaseViewModel, ActivityTestEventBinding>() {
+    BaseActivity<BaseViewModel<ActivityTestEventBinding>, ActivityTestEventBinding>() {
 
     private val fragments: ArrayList<Fragment> = ArrayList()
     private val titles = arrayOf("最新", "热门", "我的")
