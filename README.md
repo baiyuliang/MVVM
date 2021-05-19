@@ -135,7 +135,78 @@ observe方法在BaseActivity和BaseFragment中调用，子ViewModel中重写即�
      
 mContext也可以是Fragment，即获取该ui界面声明的变量，vb则是当前ui的ViewBinding！
 
-当然，这不是强制的，你也可以选择不使用这种方式，依然在ui界面更新ui！        
+当然，这不是强制的，你也可以选择不使用这种方式，依然在ui界面更新ui！  
+
+第二种方式：在BaseViewModel中传入VB泛型,这样就不需要再传入ViewBinding强转了（可以对比一下第一种和第二种写法）：
+
+      abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity() {
+          lateinit var mContext: FragmentActivity
+          lateinit var vm: VM
+          lateinit var vb: VB
+      
+          private var loadingDialog: ProgressDialog? = null
+      
+          @Suppress("UNCHECKED_CAST")
+          override fun onCreate(savedInstanceState: Bundle?) {
+              super.onCreate(savedInstanceState)
+              initResources()
+              var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
+              pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
+              val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+              vm = ViewModelProvider(this).get(clazzVM)
+      
+              pathfinders = ArrayList()
+              pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
+              val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+              val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
+              vb = method.invoke(null, layoutInflater) as VB
+      
+              vm.binding(vb)
+              vm.observe(this, this)
+      
+              setContentView(vb.root)
+              
+              ...
+               
+    open class BaseViewModel<VB : ViewBinding> : ViewModel() {
+    
+        lateinit var vb: VB
+    
+        fun binding(vb: VB) {
+            this.vb = vb
+        }
+    
+        open fun observe(activity: Activity, owner: LifecycleOwner) {
+    
+        }
+    
+        open fun observe(fragment: Fragment, owner: LifecycleOwner) {
+    
+        }
+        
+    class MainActivityViewModel : BaseViewModel<ActivityMainBinding>() {
+    
+        var articlesData = MutableLiveData<ArticleListBean>()
+    
+        fun getArticleList(page: Int, isShowLoading: Boolean = false) {
+            launch({ httpUtil.getArticleList(page) }, articlesData, isShowLoading)
+        }
+    
+        override fun observe(activity: Activity, owner: LifecycleOwner) {
+            val mContext = activity as MainActivity
+            articlesData.observe(owner, Observer {
+                vb.refreshLayout.finishRefresh()
+                vb.refreshLayout.finishLoadMore()
+                if (mContext.page == 0) mContext.list!!.clear()
+                it.datas?.let { it1 -> mContext.list!!.addAll(it1) }
+                mContext.adapter!!.notifyDataSetChanged()
+            })
+            errorData.observe(owner, Observer {
+                vb.refreshLayout.finishRefresh()
+                vb.refreshLayout.finishLoadMore()
+            })
+        }
+    }       
 
 ## 2020.9.23 简化Adapter
 
