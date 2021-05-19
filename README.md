@@ -15,7 +15,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
  
 3.ViewBinding（根据xml自动生成），你将不再需要进行findViewById的繁琐工作，比ButterKinfer更加方便  
 
-4.关于消息传递，github上有LiveData改造的LiveDataBus，作用及使用方法都类似于EventBus，但有缺点，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性  
+4.关于消息传递，github上有基于LiveData的LiveEventBus(https://github.com/JeremyLiao/LiveEventBus)，优点是具有生命周期感知能力，不需要主动注册和注销，但缺点是书写相对麻烦，且无法统一配置，衍生版SmartEventBus虽然支持定制，但配置依然麻烦，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性，且方便统一配置（下面有讲到）；
 
 ## Example
 
@@ -93,7 +93,7 @@ Fragment同！
 
 2：可以随时更换消息传递框架，方便快捷；
 
-当然，缺点，只有一个，就是发送消息所有活动界面都会收到，但这个缺点并未有任何影响，相对于上面提到的优点，完全可以忽略！
+当然，缺点，只有一个，就是发送消息所有活动界面都会收到，但这个所谓的缺点其实完全可以忽略！
 
 该框架已应用到自己公司项目中，运行良好，如果后续发现有坑的地方，会及时更新！
 
