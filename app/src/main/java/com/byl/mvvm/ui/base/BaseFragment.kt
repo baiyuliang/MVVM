@@ -26,20 +26,20 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
     lateinit var mContext: FragmentActivity
     var contentView: View? = null
     lateinit var vm: VM
-    lateinit var v: VB
+    lateinit var vb: VB
     private var loadingDialog: ProgressDialog? = null
 
-    //Fragment的View加载完毕的标记
     private var isViewCreated = false
-
-    //Fragment对用户可见的标记
     private var isUIVisible = false
-
     var isVisibleToUser = false
+
+
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mContext = context as FragmentActivity
+
         //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
         val type = javaClass.genericSuperclass as ParameterizedType
         val clazz1 = type.actualTypeArguments[0] as Class<VM>
@@ -47,9 +47,9 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
         val clazz2 = type.actualTypeArguments[1] as Class<VB>
         val method = clazz2.getMethod("inflate", LayoutInflater::class.java)
-        v = method.invoke(null, layoutInflater) as VB
+        vb = method.invoke(null, layoutInflater) as VB
 
-        mContext = context as AppCompatActivity
+        vm.observe(this, this, vb)
 
     }
 
@@ -59,18 +59,17 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         if (null == contentView) {
-            contentView = v.root
+            contentView = vb.root
             init()
             initView()
             initClick()
             initData()
-            initVM()
             LogUtil.e(getClassName())
         }
 
         return contentView
     }
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isViewCreated = true
@@ -109,8 +108,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
         }
         return className
     }
-
-    abstract fun initVM()
 
     abstract fun initView()
 
@@ -164,7 +161,7 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
      * 接口请求错误回调
      */
     open fun errorResult(errorResult: ErrorResult) {}
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         contentView = null

@@ -1,16 +1,12 @@
 package com.byl.mvvm.ui.base
 
-import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -29,10 +25,11 @@ import java.lang.reflect.ParameterizedType
 abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM
-    lateinit var v: VB
+    lateinit var vb: VB
 
     private var loadingDialog: ProgressDialog? = null
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,16 +42,17 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
         val clazz2 = type.actualTypeArguments[1] as Class<VB>
         val method = clazz2.getMethod("inflate", LayoutInflater::class.java)
-        v = method.invoke(null, layoutInflater) as VB
+        vb = method.invoke(null, layoutInflater) as VB
 
-        setContentView(v.root)
+        vm.observe(this, this, vb)
+
+        setContentView(vb.root)
 
         mContext = this
         init()
         initView()
         initClick()
         initData()
-        initVM()
         LogUtil.e(getClassName());
     }
 
@@ -96,8 +94,6 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     abstract fun initClick()
 
     abstract fun initData()
-
-    abstract fun initVM()
 
     private fun init() {
         EventBus.getDefault().register(this)

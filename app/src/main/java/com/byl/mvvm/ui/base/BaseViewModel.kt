@@ -1,17 +1,16 @@
 package com.byl.mvvm.ui.base
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Activity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
+import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.HttpUtil
 import com.byl.mvvm.api.error.ErrorResult
 import com.byl.mvvm.api.error.ErrorUtil
 import com.byl.mvvm.api.response.BaseResult
 import com.byl.mvvm.utils.LogUtil
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -20,12 +19,17 @@ import java.security.NoSuchAlgorithmException
 open class BaseViewModel : ViewModel() {
 
     private val AUTH_SECRET = "123456"//前后台协议密钥
-
     val httpUtil by lazy { HttpUtil.getInstance().getService() }
-
     var isShowLoading = MutableLiveData<Boolean>()//是否显示loading
     var errorData = MutableLiveData<ErrorResult>()//错误信息
 
+    open fun observe(activity: Activity, owner: LifecycleOwner,viewBinding: ViewBinding) {
+
+    }
+
+    open fun observe(fragment: Fragment, owner: LifecycleOwner,viewBinding: ViewBinding) {
+
+    }
 
     private fun showLoading() {
         isShowLoading.value = true
@@ -114,17 +118,7 @@ open class BaseViewModel : ViewModel() {
         if (isShowLoading) showLoading()
         viewModelScope.launch {
             try {
-//                 var result: BaseResult<T>? = null
-//                 withContext(Dispatchers.IO) {
-//                     result = block()
-//                 }
-//                 if (result!!.errorCode == 0) {//请求成功
-//                     liveData.value = result!!.data
-//                 } else {
-//                     LogUtil.e("请求错误>>" + result!!.errorMsg)
-//                     showError(ErrorResult(result!!.errorCode, result!!.errorMsg, isShowError))
-//                 }
-                val result = withContext(Dispatchers.IO) { block() }
+                val result = block()
                 if (result.errorCode == 0) {//请求成功
                     liveData.value = result.data
                 } else {

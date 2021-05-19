@@ -1,24 +1,33 @@
 package com.byl.mvvm.ui.main
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.byl.mvvm.databinding.ActivityMainBinding
-import com.byl.mvvm.event.EventCode
-import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.ui.base.BaseActivity
+import com.byl.mvvm.databinding.FragmentMainBinding
+import com.byl.mvvm.ui.base.BaseFragment
 import com.byl.mvvm.ui.main.adapter.ArticleListAdapter
 import com.byl.mvvm.ui.main.model.ArticleBean
-import com.byl.mvvm.ui.main.vm.MainActivityViewModel
-import com.byl.mvvm.utils.ToastUtil
+import com.byl.mvvm.ui.main.vm.MainFragmentViewModel
 
-class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
+class MainFragment : BaseFragment<MainFragmentViewModel, FragmentMainBinding>() {
 
+    var id: Int? = 0
     var adapter: ArticleListAdapter? = null
     var list: ArrayList<ArticleBean>? = null
     var page: Int = 0
 
+    companion object {
+        fun getInstance(id: Int): MainFragment {
+            val fragment = MainFragment()
+            val b = Bundle()
+            b.putInt("id", id)
+            fragment.arguments = b
+            return fragment
+        }
+    }
 
     override fun initView() {
+        id = arguments?.get("id") as Int?
         list = ArrayList()
         adapter = ArticleListAdapter(mContext, list!!)
         adapter!!.itemClick {
@@ -41,18 +50,11 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
     }
 
     override fun initData() {
-        vm.getArticleList(page, true)
+
     }
 
-    /**
-     * 接收消息
-     */
-    override fun handleEvent(msg: EventMessage) {
-        super.handleEvent(msg)
-        if (msg.code == EventCode.REFRESH) {
-            ToastUtil.showToast(mContext, "主页：刷新")
-            page = 0
-            vm.getArticleList(page)
-        }
+    override fun lazyLoadData() {
+        vm.getArticleList(page)
     }
+
 }

@@ -147,7 +147,7 @@ ApiService:
     
 ## 2020.08.31
 
-关于BaseAdapter，这里解释下原来的说明，为什么recycleview高度要设置为wrap？
+关于BaseAdapter，这里解释下原来的说明，为什么recycleview的item高度要设置为wrap？
 
 由于item的ViewBindding也是通过反射得到，但得到后itemView的宽高会自动被系统设为wrap，所以这里需要重新赋值宽高，之前的做法是将父容器宽高给了item，这里有问题，item的父容器就是RecyclerView，所以如果RecyclerView设置了宽高后，item显示就出问题了，因此，现在修改为item重置自身宽高，宽度match_parent，高度wrap_content，此时就要注意，item的最外层父布局的的宽高同样为match_parent和wrap_content，这适用于大多数item的布局，如果确实有需求要对item设置固定宽高，建议在子Adapter中通过代码动态设置宽高！
 
@@ -177,3 +177,44 @@ BaseAdapter：
     }
     
 直接传入item对应的ViewBinding对象，更加简单便捷！
+
+## 2021.5.19 更新内容：
+
+1.使用协程请求接口时，不再需要withContext-IO，有suspend关键字即可；
+
+2.将UI更新部分，放在了viewmodel中进行，在ui中仅调用接口请求方法即可，例：
+
+    class MainActivityViewModel : BaseViewModel() {
+    
+        var articlesData = MutableLiveData<ArticleListBean>()
+    
+        fun getArticleList(page: Int, isShowLoading: Boolean = false) {
+            launch({ httpUtil.getArticleList(page) }, articlesData, isShowLoading)
+        }
+    
+        override fun observe(activity: Activity, owner: LifecycleOwner, viewBinding: ViewBinding) {
+            val mContext = activity as MainActivity
+            val vb = viewBinding as ActivityMainBinding
+            articlesData.observe(owner, Observer {
+                vb.refreshLayout.finishRefresh()
+                vb.refreshLayout.finishLoadMore()
+                if (mContext.page == 0) mContext.list!!.clear()
+                it.datas?.let { it1 -> mContext.list!!.addAll(it1) }
+                mContext.adapter!!.notifyDataSetChanged()
+            })
+            errorData.observe(owner, Observer {
+                vb.refreshLayout.finishRefresh()
+                vb.refreshLayout.finishLoadMore()
+            })
+        }
+    }
+
+observe方法在BaseActivity和BaseFragment中调用，子ViewModel中重写即可，重点是有两个强制转化：
+
+     val mContext = activity as MainActivity
+     val vb = viewBinding as ActivityMainBinding
+     
+mContext也可以是Fragment，即获取该ui界面声明的变量，vb则是当前ui的ViewBinding！
+
+当然，这不是强制的，你也可以选择不使用这种方式，依然在ui界面更新ui！
+    

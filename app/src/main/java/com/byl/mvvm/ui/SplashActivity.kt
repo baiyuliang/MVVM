@@ -59,10 +59,6 @@ class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
 
     }
 
-    override fun initVM() {
-
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
