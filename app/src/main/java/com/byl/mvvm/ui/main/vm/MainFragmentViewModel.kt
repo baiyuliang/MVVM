@@ -1,5 +1,6 @@
 package com.byl.mvvm.ui.main.vm
 
+import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +18,7 @@ class MainFragmentViewModel : BaseViewModel<FragmentMainBinding>() {
         launch({ httpUtil.getArticleList(page) }, articlesData, isShowLoading)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun observe(fragment: Fragment, owner: LifecycleOwner) {
         val mContext = fragment as MainFragment
         articlesData.observe(owner, Observer {

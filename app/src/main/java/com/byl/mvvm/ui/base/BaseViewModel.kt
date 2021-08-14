@@ -115,6 +115,9 @@ open class BaseViewModel<VB : ViewBinding> : ViewModel() {
 
     /**
      * 请求接口，可定制是否显示loading和错误提示
+     * block：闭包（功能代码块，定义了其，为返回值为BaseResult的协程），
+     * 相当于 val block={ suspend { httpUtil.getArticleList(page) } }
+     *       val result=block()
      */
     fun <T> launch(
         block: suspend CoroutineScope.() -> BaseResult<T>,//请求接口方法，T表示data实体泛型，调用时可将data对应的bean传入即可

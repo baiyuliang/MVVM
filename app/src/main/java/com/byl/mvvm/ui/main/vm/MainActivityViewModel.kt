@@ -1,5 +1,6 @@
 package com.byl.mvvm.ui.main.vm
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +19,7 @@ class MainActivityViewModel : BaseViewModel<ActivityMainBinding>() {
         launch({ httpUtil.getArticleList(page) }, articlesData, isShowLoading)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun observe(activity: Activity, owner: LifecycleOwner) {
         val mContext = activity as MainActivity
         articlesData.observe(owner, Observer {
