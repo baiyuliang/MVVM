@@ -15,15 +15,16 @@ import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.util.Logg
+import com.byl.mvvm.utils.GenericParadigmUtil
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.lang.reflect.ParameterizedType
 
-
-abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity(), IView {
+abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity() , IView{
 
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM
-    lateinit var v: VB
+    lateinit var vb: VB
 
     private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
@@ -31,17 +32,21 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initResources()
+        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        vm = ViewModelProvider(this).get(clazzVM)
 
-        //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
-        val type = javaClass.genericSuperclass as ParameterizedType
-        val clazz1 = type.actualTypeArguments[0] as Class<VM>
-        vm = ViewModelProvider(this).get(clazz1)
+        pathfinders = ArrayList()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
+        vb = method.invoke(null, layoutInflater) as VB
 
-        val clazz2 = type.actualTypeArguments[1] as Class<VB>
-        val method = clazz2.getMethod("inflate", LayoutInflater::class.java)
-        v = method.invoke(null, layoutInflater) as VB
+        vm.binding(vb)
+        vm.observe(this, this)
 
-        setContentView(v.root)
+        setContentView(vb.root)
 
         mContext = this
         Logg.i(getClassName())
@@ -49,7 +54,6 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         initView()
         initClick()
         initData()
-        initVM()
     }
 
     /**
@@ -93,16 +97,14 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
     abstract fun initData()
 
-    abstract fun initVM()
-
     private fun init() {
         Event.register(this)
         // loading
-        vm.isShowLoading.observe(this, {
+        (vm as BaseViewModel<*>).isShowLoading.observe(this, {
             if (it) showLoading() else dismissLoading()
         })
         // 错误信息
-        vm.errorData.observe(this, {
+        (vm as BaseViewModel<*>).errorData.observe(this, {
             if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })

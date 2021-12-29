@@ -13,7 +13,7 @@ import com.byl.mvvm.ui.base.BaseViewModel
 import com.byl.mvvm.ui.main.MainActivity
 
 
-class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
+class SplashActivity : BaseActivity<BaseViewModel<ActivitySplashBinding>, ActivitySplashBinding>() {
 
 
     override fun initView() {
@@ -50,10 +50,6 @@ class SplashActivity : BaseActivity<BaseViewModel, ActivitySplashBinding>() {
     }
 
     override fun initData() {
-
-    }
-
-    override fun initVM() {
 
     }
 

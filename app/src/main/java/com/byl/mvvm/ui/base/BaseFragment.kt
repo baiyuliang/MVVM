@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -15,16 +14,15 @@ import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.util.Logg
+import com.byl.mvvm.utils.GenericParadigmUtil
 import org.greenrobot.eventbus.Subscribe
-import java.lang.reflect.ParameterizedType
 
-
-abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), IView {
+abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment(), IView {
 
     lateinit var mContext: FragmentActivity
     var contentView: View? = null
     lateinit var vm: VM
-    lateinit var v: VB
+    lateinit var vb: VB
 
     private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
@@ -33,22 +31,26 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
 
     //Fragment对用户可见的标记
     private var isUIVisible = false
-
     var isVisibleToUser = false
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //注意 type.actualTypeArguments[0]=BaseViewModel，type.actualTypeArguments[1]=ViewBinding
-        val type = javaClass.genericSuperclass as ParameterizedType
-        val clazz1 = type.actualTypeArguments[0] as Class<VM>
-        vm = ViewModelProvider(this).get(clazz1)
+        mContext = context as FragmentActivity
 
-        val clazz2 = type.actualTypeArguments[1] as Class<VB>
-        val method = clazz2.getMethod("inflate", LayoutInflater::class.java)
-        v = method.invoke(null, layoutInflater) as VB
+        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        vm = ViewModelProvider(this).get(clazzVM)
 
-        mContext = context as AppCompatActivity
+        pathfinders = ArrayList()
+        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
+        vb = method.invoke(null, layoutInflater) as VB
+
+        vm.binding(vb)
+        vm.observe(this, this)
 
     }
 
@@ -58,13 +60,12 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
             savedInstanceState: Bundle?
     ): View? {
         if (null == contentView) {
-            contentView = v.root
+            contentView = vb.root
             Logg.i(getClassName())
             init()
             initView()
             initClick()
             initData()
-            initVM()
         }
 
         return contentView
@@ -116,8 +117,6 @@ abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment(), 
     abstract fun initClick()
 
     abstract fun initData()
-
-    abstract fun initVM()
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

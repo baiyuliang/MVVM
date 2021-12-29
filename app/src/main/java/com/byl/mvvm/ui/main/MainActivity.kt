@@ -8,8 +8,9 @@ import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ui.base.BaseActivity
 import com.byl.mvvm.ui.main.adapter.ArticleListAdapter
 import com.byl.mvvm.ui.main.model.ArticleBean
+import com.byl.mvvm.ui.main.vm.MainActivityViewModel
 
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
+class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() {
 
     var adapter: ArticleListAdapter? = null
     var list: ArrayList<ArticleBean>? = null
@@ -22,15 +23,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         adapter?.itemClick {
             startActivity(Intent(mContext, TestEventActivity::class.java))
         }
-        v.mRecyclerView.layoutManager = LinearLayoutManager(mContext)
-        v.mRecyclerView.adapter = adapter
+        vb.mRecyclerView.layoutManager = LinearLayoutManager(mContext)
+        vb.mRecyclerView.adapter = adapter
 
-        v.refreshLayout.autoRefresh()
-        v.refreshLayout.setOnRefreshListener {//下拉刷新
+        vb.refreshLayout.autoRefresh()
+        vb.refreshLayout.setOnRefreshListener {//下拉刷新
             page = 0
             vm.getArticleList(page, true)
         }
-        v.refreshLayout.setOnLoadMoreListener {//上拉加载
+        vb.refreshLayout.setOnLoadMoreListener {//上拉加载
             vm.getArticleList(++page, true)
         }
     }
@@ -40,15 +41,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun initData() {
-
-    }
-
-    override fun initVM() {
-        vm.articlesData.observe(this, {
-            if (page == 0) list?.clear()
-            it.datas?.let { it1 -> list?.addAll(it1) }
-            adapter?.notifyDataSetChanged()
-        })
+        vm.getArticleList(page, true)
     }
 
     /**
@@ -68,9 +61,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun dismissLoading() {
         if (page == 0) {
-            v.refreshLayout.finishRefresh()
+            vb.refreshLayout.finishRefresh()
         } else {
-            v.refreshLayout.finishLoadMore()
+            vb.refreshLayout.finishLoadMore()
         }
     }
 
