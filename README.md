@@ -16,7 +16,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 3. ViewBinding（根据 xml 自动生成），你将不再需要进行 findViewById 的繁琐工作，比 ButterKnife 更加方便；
 
-4.关于消息传递，github上有基于LiveData的LiveEventBus(https://github.com/JeremyLiao/LiveEventBus)，优点是具有生命周期感知能力，不需要主动注册和注销，但缺点是书写相对麻烦，且无法统一配置，衍生版SmartEventBus虽然支持定制，但配置依然麻烦，而本项目选择继续使用EventBus的原因，则是因为EventBus的强大以及它的稳定性和灵活性，且方便统一配置（下面有讲到）；
+4.关于消息传递，github 上有基于 LiveData 的 [LiveEventBus](https://github.com/JeremyLiao/LiveEventBus)，优点是具有生命周期感知能力，不需要主动注册和注销，但缺点是书写相对麻烦，且无法统一配置，衍生版 SmartEventBus 虽然支持定制，但配置依然麻烦，而本项目选择继续使用 EventBus 的原因，则是因为 EventBus 的强大以及它的稳定性和灵活性，且方便统一配置（下面有讲到）；
 
 ## Example
 
@@ -35,10 +35,6 @@ class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
     }
 
     override fun initData() {
-
-    }
-
-    override fun initVM() {
 
     }
 
@@ -137,7 +133,8 @@ override fun handleEvent(msg: EventMessage) {
 
 1.使用协程请求接口时，不再需要 withContext-IO，有 suspend 关键字即可；
 
-2.将 UI 更新部分，放在了 viewmodel 中进行，在 ui 中仅调用接口请求方法即可，例：
+2.将 UI 更新部分，放在了 viewModel 中进行，在 ui 中仅调用接口请求方法即可，例：
+
 ```kotlin
     class MainActivityViewModel : BaseViewModel() {
     
@@ -166,15 +163,18 @@ override fun handleEvent(msg: EventMessage) {
 ```
 
 observe 方法在 BaseActivity 和 BaseFragment 中调用，子 ViewModel 中重写即可，重点是有两个强制转化：
+
 ```kotlin
      val mContext = activity as MainActivity
      val vb = viewBinding as ActivityMainBinding
 ```
+
 mContext 也可以是 Fragment，即获取该 ui 界面声明的变量，vb 则是当前 ui 的 ViewBinding！
 
-当然，这不是强制的，你也可以选择不使用这种方式，依然在ui界面更新 ui！
+当然，这不是强制的，你也可以选择不使用这种方式，依然在 ui 界面更新 ui！
 
 第二种方式：在 BaseViewModel 中传入 VB 泛型,这样就不需要再传入 ViewBinding 强转了（可以对比一下第一种和第二种写法）：
+
 ```kotlin
       abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity() {
           lateinit var mContext: FragmentActivity
