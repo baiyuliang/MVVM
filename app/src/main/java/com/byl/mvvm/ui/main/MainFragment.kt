@@ -57,4 +57,12 @@ class MainFragment : BaseFragment<MainFragmentViewModel, FragmentMainBinding>() 
         vm.getArticleList(page)
     }
 
+    override fun dismissLoading() {
+        if (page == 0) {
+            vb.refreshLayout.finishRefresh()
+        } else {
+            vb.refreshLayout.finishLoadMore()
+        }
+    }
+
 }
