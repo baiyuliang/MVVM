@@ -14,8 +14,8 @@ import java.lang.reflect.ParameterizedType
  * 如果item有需求要设置为固定宽高，可以在子类的convert方法里，通过代码设置
  */
 abstract class BaseAdapter<VB : ViewBinding, T>(
-        var mContext: Activity,
-        var listDatas: ArrayList<T>
+    var mContext: Activity,
+    var listDatas: ArrayList<T>
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -24,8 +24,8 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
         val method = clazz.getMethod("inflate", LayoutInflater::class.java)
         var vb = method.invoke(null, LayoutInflater.from(mContext)) as VB
         vb.root.layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT,
-                RecyclerView.LayoutParams.WRAP_CONTENT
+            RecyclerView.LayoutParams.MATCH_PARENT,
+            RecyclerView.LayoutParams.WRAP_CONTENT
         )
         return BaseViewHolder(vb, vb.root)
     }

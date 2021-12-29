@@ -16,7 +16,7 @@ Kotlin+MVVM+Retrofit+协程+ViewBinding+EventBus
 
 3. ViewBinding（根据 xml 自动生成），你将不再需要进行 findViewById 的繁琐工作，比 ButterKnife 更加方便；
 
-4.关于消息传递，github 上有基于 LiveData 的 [LiveEventBus](https://github.com/JeremyLiao/LiveEventBus)，优点是具有生命周期感知能力，不需要主动注册和注销，但缺点是书写相对麻烦，且无法统一配置，衍生版 SmartEventBus 虽然支持定制，但配置依然麻烦，而本项目选择继续使用 EventBus 的原因，则是因为 EventBus 的强大以及它的稳定性和灵活性，且方便统一配置（下面有讲到）；
+4. 关于消息传递，github 上有基于 LiveData 的 [LiveEventBus](https://github.com/JeremyLiao/LiveEventBus)，优点是具有生命周期感知能力，不需要主动注册和注销，但缺点是书写相对麻烦，且无法统一配置，衍生版 SmartEventBus 虽然支持定制，但配置依然麻烦，而本项目选择继续使用 EventBus 的原因，则是因为 EventBus 的强大以及它的稳定性和灵活性，且方便统一配置（下面有讲到）；
 
 ## Example
 

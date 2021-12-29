@@ -8,7 +8,7 @@ import com.byl.mvvm.ui.main.model.ArticleBean
 
 
 class ArticleListAdapter(context: Activity, listDatas: ArrayList<ArticleBean>) :
-        BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
+    BaseAdapter<ItemArticleBinding, ArticleBean>(context, listDatas) {
 
     override fun convert(v: ItemArticleBinding, t: ArticleBean, position: Int) {
         Glide.with(mContext).load(t.envelopePic).into(v.ivCover)

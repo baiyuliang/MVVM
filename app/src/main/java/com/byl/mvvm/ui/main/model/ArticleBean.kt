@@ -21,6 +21,7 @@ class ArticleBean {
     var zan: Int = 0
     var isFresh: Boolean = false
     var isShowImage: Boolean = true
+
     // 分类name
     var navigationName: String? = null
 }

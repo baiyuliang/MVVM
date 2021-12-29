@@ -16,11 +16,9 @@ import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.util.Logg
 import com.byl.mvvm.utils.GenericParadigmUtil
-import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import java.lang.reflect.ParameterizedType
 
-abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity() , IView{
+abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity(), IView {
 
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM

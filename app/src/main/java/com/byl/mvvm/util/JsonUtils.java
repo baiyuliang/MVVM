@@ -1,10 +1,5 @@
 package com.byl.mvvm.util;
 
-import com.google.gson.Gson;
-
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-
 /**
  * JsonUtil
  *

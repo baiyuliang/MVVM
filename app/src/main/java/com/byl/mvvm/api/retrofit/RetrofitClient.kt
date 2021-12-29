@@ -29,27 +29,27 @@ class RetrofitClient {
     }
 
     private var cookieJar: PersistentCookieJar = PersistentCookieJar(
-            SetCookieCache(),
-            SharedPrefsCookiePersistor(App.instance)
+        SetCookieCache(),
+        SharedPrefsCookiePersistor(App.instance)
     )
 
     init {
         retrofit = Retrofit.Builder()
-                .client(getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(URLConstant.BASE_URL)
-                .build()
+            .client(getOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(URLConstant.BASE_URL)
+            .build()
     }
 
     private fun getOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .cookieJar(cookieJar)
-                .addNetworkInterceptor(getLoggingInterceptor())
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .cookieJar(cookieJar)
+            .addNetworkInterceptor(getLoggingInterceptor())
 //                .sslSocketFactory(SSLContextSecurity.createIgnoreVerifySSL("TLS"))
-                .build()
+            .build()
     }
 
     private fun getLoggingInterceptor(): Interceptor {
@@ -75,7 +75,7 @@ class RetrofitClient {
             hashMap.putIfAbsent(threadId, java.lang.StringBuilder())?.apply {
                 // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
                 if ((msg.startsWith("{") && msg.endsWith("}"))
-                        || (msg.startsWith("[") && msg.endsWith("]"))
+                    || (msg.startsWith("[") && msg.endsWith("]"))
                 ) {
                     msg = JsonUtils.formatJson(JsonUtils.decodeUnicode(msg))
                 }

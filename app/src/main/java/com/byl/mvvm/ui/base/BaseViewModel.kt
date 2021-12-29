@@ -2,7 +2,10 @@ package com.byl.mvvm.ui.base
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.HttpUtil
 import com.byl.mvvm.api.error.ErrorResult
