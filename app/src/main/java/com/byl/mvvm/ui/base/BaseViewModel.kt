@@ -20,6 +20,7 @@ open class BaseViewModel<VB : ViewBinding> : ViewModel() {
     val httpUtil by lazy { HttpUtil.getInstance().getService() }
     var isShowLoading = MutableLiveData<Boolean>()//是否显示loading
     var errorData = MutableLiveData<ErrorResult>()//错误信息
+
     lateinit var vb: VB
 
     fun binding(vb: VB) {
@@ -55,6 +56,8 @@ open class BaseViewModel<VB : ViewBinding> : ViewModel() {
 
     /**
      * 请求接口，可定制是否显示 loading 和错误提示
+     *
+     * @param block  请求接口方法，T 表示 data 实体泛型，调用时可将 data 对应的 bean 传入即可
      * block：闭包（功能代码块，定义了其，为返回值为BaseResult的协程），
      * 相当于 val block={ suspend { httpUtil.getArticleList(page) } }
      *       val result=block()
