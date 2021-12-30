@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.byl.mvvm.utils.GenericParadigmUtil
+import com.byl.mvvm.util.GenericParadigmUtils
 import com.byl.mvvm.widget.clicks
 
 /**
@@ -19,9 +19,9 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
-        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        val pathfinders = ArrayList<GenericParadigmUtils.Pathfinder>()
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 0))
+        val clazzVB = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders)
         val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
         val vb = method.invoke(null, LayoutInflater.from(mContext)) as VB
         vb.root.layoutParams = RecyclerView.LayoutParams(

@@ -1,4 +1,4 @@
-package com.byl.mvvm.utils;
+package com.byl.mvvm.util;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * @author by zhuxiaoan on 2019/4/25 0025.
  */
-public class GenericParadigmUtil {
+public class GenericParadigmUtils {
 
     public static Class parseGenericParadigm(Object object, int position) {
         if (object == null) {
             return null;
         }
 
-        return GenericParadigmUtil.parseGenericParadigm(object.getClass(), position);
+        return GenericParadigmUtils.parseGenericParadigm(object.getClass(), position);
     }
 
     public static Class parseGenericParadigm(Class clazz, int position) {
@@ -24,19 +24,19 @@ public class GenericParadigmUtil {
         }
         List<Pathfinder> pathfinders = new ArrayList<Pathfinder>(1);
         pathfinders.add(new ConsistentPathfinder(Integer.MAX_VALUE, position));
-        return GenericParadigmUtil.parseGenericParadigm(clazz, pathfinders);
+        return GenericParadigmUtils.parseGenericParadigm(clazz, pathfinders);
     }
 
     public static Class parseGenericParadigm(Object object, List<Pathfinder> pathfinders) {
         if (object == null) {
             return null;
         }
-        return GenericParadigmUtil.parseGenericParadigm(object.getClass(), pathfinders);
+        return GenericParadigmUtils.parseGenericParadigm(object.getClass(), pathfinders);
     }
 
     public static Class parseGenericParadigm(Class clazz, List<Pathfinder> pathfinders) {
 
-        if (!GenericParadigmUtil.isGenericParadigm(clazz) || pathfinders == null || pathfinders.isEmpty()) {
+        if (!GenericParadigmUtils.isGenericParadigm(clazz) || pathfinders == null || pathfinders.isEmpty()) {
             return null;
         }
         assertPathfinder(pathfinders);
@@ -45,7 +45,7 @@ public class GenericParadigmUtil {
         int size = pathfinders.size();
         Type type = clazz.getGenericSuperclass();
 
-        return GenericParadigmUtil.getGenericClassPlus(type, 0, size, isConsistentPathfinder, pathfinders);
+        return GenericParadigmUtils.getGenericClassPlus(type, 0, size, isConsistentPathfinder, pathfinders);
     }
 
     public static Class parseInterfaceGenericParadigm(Object object, int who, int position) {
@@ -53,7 +53,7 @@ public class GenericParadigmUtil {
             return null;
         }
 
-        return GenericParadigmUtil.parseInterfaceGenericParadigm(object.getClass(), who, position);
+        return GenericParadigmUtils.parseInterfaceGenericParadigm(object.getClass(), who, position);
     }
 
     public static Class parseInterfaceGenericParadigm(Class clazz, int who, int position) {
@@ -62,18 +62,18 @@ public class GenericParadigmUtil {
         }
         List<Pathfinder> pathfinders = new ArrayList<Pathfinder>(1);
         pathfinders.add(new ConsistentPathfinder(Integer.MAX_VALUE, position));
-        return GenericParadigmUtil.parseInterfaceGenericParadigm(clazz, who, pathfinders);
+        return GenericParadigmUtils.parseInterfaceGenericParadigm(clazz, who, pathfinders);
     }
 
     public static Class parseInterfaceGenericParadigm(Object object, int who, List<Pathfinder> pathfinders) {
         if (object == null) {
             return null;
         }
-        return GenericParadigmUtil.parseInterfaceGenericParadigm(object.getClass(), who, pathfinders);
+        return GenericParadigmUtils.parseInterfaceGenericParadigm(object.getClass(), who, pathfinders);
     }
 
     public static Class parseInterfaceGenericParadigm(Class clazz, int who, List<Pathfinder> pathfinders) {
-        if (!GenericParadigmUtil.isInterfaceGenericParadigm(clazz) || pathfinders == null || pathfinders.isEmpty()) {
+        if (!GenericParadigmUtils.isInterfaceGenericParadigm(clazz) || pathfinders == null || pathfinders.isEmpty()) {
             return null;
         }
         Type[] genericInterfaces = clazz.getGenericInterfaces();
@@ -87,14 +87,14 @@ public class GenericParadigmUtil {
         int size = pathfinders.size();
         Type type = genericInterfaces[who];
 
-        return GenericParadigmUtil.getGenericClassPlus(type, 0, size, isConsistentPathfinder, pathfinders);
+        return GenericParadigmUtils.getGenericClassPlus(type, 0, size, isConsistentPathfinder, pathfinders);
     }
 
     public static boolean isInterfaceGenericParadigm(Object object) {
         if (object == null) {
             return false;
         }
-        return GenericParadigmUtil.isInterfaceGenericParadigm(object.getClass());
+        return GenericParadigmUtils.isInterfaceGenericParadigm(object.getClass());
     }
 
     public static boolean isInterfaceGenericParadigm(Class clazz) {
@@ -110,7 +110,7 @@ public class GenericParadigmUtil {
         if (object == null) {
             return false;
         }
-        return GenericParadigmUtil.isGenericParadigm(object.getClass());
+        return GenericParadigmUtils.isGenericParadigm(object.getClass());
     }
 
     public static boolean isGenericParadigm(Class clazz) {

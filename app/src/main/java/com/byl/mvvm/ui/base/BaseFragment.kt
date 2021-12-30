@@ -14,7 +14,7 @@ import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
 import com.byl.mvvm.ui.dialog.LoadingDialog
 import com.byl.mvvm.util.Logg
-import com.byl.mvvm.utils.GenericParadigmUtil
+import com.byl.mvvm.util.GenericParadigmUtils
 import org.greenrobot.eventbus.Subscribe
 
 abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment(), IView {
@@ -38,14 +38,14 @@ abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment
         super.onCreate(savedInstanceState)
         mContext = context as FragmentActivity
 
-        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
-        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        var pathfinders = ArrayList<GenericParadigmUtils.Pathfinder>()
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
         vm = ViewModelProvider(this).get(clazzVM)
 
         pathfinders = ArrayList()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
-        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders)
         val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
         vb = method.invoke(null, layoutInflater) as VB
 
