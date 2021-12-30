@@ -29,7 +29,7 @@ object SSLContextSecurity {
             }
         })
 
-        sc!!.init(null, trustAllCerts, java.security.SecureRandom())
+        sc?.init(null, trustAllCerts, java.security.SecureRandom())
 
         // Create all-trusting host name verifier
         val allHostsValid = HostnameVerifier { _, _ -> true }

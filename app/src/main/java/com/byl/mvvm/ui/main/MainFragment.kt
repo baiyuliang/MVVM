@@ -29,8 +29,8 @@ class MainFragment : BaseFragment<MainFragmentViewModel, FragmentMainBinding>() 
     override fun initView() {
         id = arguments?.get("id") as Int?
         list = ArrayList()
-        adapter = ArticleListAdapter(mContext, list!!)
-        adapter!!.itemClick {
+        adapter = ArticleListAdapter(mContext, list)
+        adapter?.itemClick {
             startActivity(Intent(mContext, TestEventActivity::class.java))
         }
         vb.mRecyclerView.layoutManager = LinearLayoutManager(mContext)

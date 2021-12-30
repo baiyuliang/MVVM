@@ -148,9 +148,9 @@ override fun handleEvent(msg: EventMessage) {
             articlesData.observe(owner, Observer {
                 vb.refreshLayout.finishRefresh()
                 vb.refreshLayout.finishLoadMore()
-                if (mContext.page == 0) mContext.list!!.clear()
-                it.datas?.let { it1 -> mContext.list!!.addAll(it1) }
-                mContext.adapter!!.notifyDataSetChanged()
+                if (mContext.page == 0) mContext.list?.clear()
+                it.datas?.let { it1 -> mContext.list?.addAll(it1) }
+                mContext.adapter?.notifyDataSetChanged()
             })
             errorData.observe(owner, Observer {
                 vb.refreshLayout.finishRefresh()
@@ -232,9 +232,9 @@ mContext 也可以是 Fragment，即获取该 ui 界面声明的变量，vb 则�
             articlesData.observe(owner, Observer {
                 vb.refreshLayout.finishRefresh()
                 vb.refreshLayout.finishLoadMore()
-                if (mContext.page == 0) mContext.list!!.clear()
-                it.datas?.let { it1 -> mContext.list!!.addAll(it1) }
-                mContext.adapter!!.notifyDataSetChanged()
+                if (mContext.page == 0) mContext.list?.clear()
+                it.datas?.let { it1 -> mContext.list?.addAll(it1) }
+                mContext.adapter?.notifyDataSetChanged()
             })
             errorData.observe(owner, Observer {
                 vb.refreshLayout.finishRefresh()

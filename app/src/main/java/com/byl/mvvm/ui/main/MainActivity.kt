@@ -19,7 +19,7 @@ class MainActivity : BaseActivity<MainActivityViewModel, ActivityMainBinding>() 
 
     override fun initView() {
         list = ArrayList()
-        adapter = ArticleListAdapter(mContext, list!!)
+        adapter = ArticleListAdapter(mContext, list)
         adapter?.itemClick {
             startActivity(Intent(mContext, TestEventActivity::class.java))
         }

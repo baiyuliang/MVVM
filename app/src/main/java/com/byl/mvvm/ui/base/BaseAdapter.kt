@@ -15,7 +15,7 @@ import com.byl.mvvm.widget.clicks
  */
 abstract class BaseAdapter<VB : ViewBinding, T>(
     var mContext: Activity,
-    var listDatas: ArrayList<T>
+    var listDatas: ArrayList<T>?
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -40,13 +40,13 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
             true
         }
 
-        convert(holder.vb as VB, listDatas[position], position)
+        convert(holder.vb as VB, listDatas?.get(position), position)
     }
 
-    abstract fun convert(vb: VB, t: T, position: Int)
+    abstract fun convert(vb: VB, t: T?, position: Int)
 
     override fun getItemCount(): Int {
-        return listDatas.size
+        return listDatas?.size ?: 0
     }
 
 
