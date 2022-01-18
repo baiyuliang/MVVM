@@ -14,7 +14,7 @@ import java.lang.reflect.Method
  * @author lishide
  * @date 2020/7/20
  */
-object Event {
+object EventBusManager {
 
     fun getEventBusInstance(): org.greenrobot.eventbus.EventBus? {
         return if (DEPENDENCY_EVENTBUS) {

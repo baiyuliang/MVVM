@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
-import com.byl.mvvm.event.Event
+import com.byl.mvvm.event.EventBusManager
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ext.toast
@@ -69,7 +69,7 @@ abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompa
 
     override fun onDestroy() {
         super.onDestroy()
-        Event.unregister(this)
+        EventBusManager.unregister(this)
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompa
     abstract fun initData()
 
     private fun init() {
-        Event.register(this)
+        EventBusManager.register(this)
         // loading
         (vm as BaseViewModel<*>).isShowLoading.observe(this, {
             if (it) showLoading() else dismissLoading()
