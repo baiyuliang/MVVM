@@ -1,9 +1,8 @@
 package com.byl.mvvm.ui.main
 
-
 import androidx.fragment.app.Fragment
-import com.byl.mvvm.App
 import com.byl.mvvm.databinding.ActivityTestEventBinding
+import com.byl.mvvm.event.EventBusManager
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
 import com.byl.mvvm.ui.base.BaseActivity
@@ -25,7 +24,7 @@ class TestEventActivity :
 
     override fun initClick() {
         vb.btn.clicks {
-            App.post(EventMessage(EventCode.REFRESH))
+            EventBusManager.post(EventMessage(EventCode.REFRESH))
         }
     }
 

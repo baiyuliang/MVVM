@@ -1,48 +1,43 @@
 package com.byl.mvvm.ui.base
 
-import android.app.ProgressDialog
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
-import com.byl.mvvm.databinding.ActivitySplashBinding
+import com.byl.mvvm.event.EventBusManager
 import com.byl.mvvm.event.EventCode
 import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.utils.GenericParadigmUtil
-import com.byl.mvvm.utils.LogUtil
-import com.byl.mvvm.utils.ToastUtil
-import org.greenrobot.eventbus.EventBus
+import com.byl.mvvm.ext.toast
+import com.byl.mvvm.ui.dialog.LoadingDialog
+import com.byl.mvvm.util.Logg
+import com.byl.mvvm.util.GenericParadigmUtils
 import org.greenrobot.eventbus.Subscribe
-import java.lang.reflect.ParameterizedType
 
+abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity(), IView {
 
-abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompatActivity() {
     lateinit var mContext: FragmentActivity
     lateinit var vm: VM
     lateinit var vb: VB
 
-    private var loadingDialog: ProgressDialog? = null
+    private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initResources()
-        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
-        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        var pathfinders = ArrayList<GenericParadigmUtils.Pathfinder>()
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
         vm = ViewModelProvider(this).get(clazzVM)
 
         pathfinders = ArrayList()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
-        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders)
         val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
         vb = method.invoke(null, layoutInflater) as VB
 
@@ -52,11 +47,11 @@ abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompa
         setContentView(vb.root)
 
         mContext = this
+        Logg.i(getClassName())
         init()
         initView()
         initClick()
         initData()
-        LogUtil.e(getClassName())
     }
 
     /**
@@ -74,16 +69,18 @@ abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompa
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        EventBusManager.unregister(this)
     }
 
-    //事件传递
+    /**
+     * 事件传递
+     */
     @Subscribe
     fun onEventMainThread(msg: EventMessage) {
         handleEvent(msg)
     }
 
-    open fun getClassName(): String? {
+    open fun getClassName(): String {
         val className = "BaseActivity"
         try {
             return javaClass.name
@@ -99,28 +96,37 @@ abstract class BaseActivity<VM : BaseViewModel<VB>, VB : ViewBinding> : AppCompa
     abstract fun initData()
 
     private fun init() {
-        EventBus.getDefault().register(this)
-        //loading
-        (vm as BaseViewModel<*>).isShowLoading.observe(this, Observer {
+        EventBusManager.register(this)
+        // loading
+        (vm as BaseViewModel<*>).isShowLoading.observe(this, {
             if (it) showLoading() else dismissLoading()
         })
-        //错误信息
-        (vm as BaseViewModel<*>).errorData.observe(this, Observer {
-            if (it.show) ToastUtil.showToast(mContext, it.errMsg)
+        // 错误信息
+        (vm as BaseViewModel<*>).errorData.observe(this, {
+            if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })
     }
 
-    fun showLoading() {
-        if (loadingDialog == null) {
-            loadingDialog = ProgressDialog(this)
-        }
-        loadingDialog!!.show()
+    override fun showLoading() {
+        mLoading.showLoading()
     }
 
-    fun dismissLoading() {
-        loadingDialog?.dismiss()
-        loadingDialog = null
+    override fun dismissLoading() {
+        mLoading.dismiss()
+    }
+
+    override fun showMessage(message: String?) {
+        mContext.toast(message)
+    }
+
+    override fun close() {
+        finish()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dismissLoading()
     }
 
     /**

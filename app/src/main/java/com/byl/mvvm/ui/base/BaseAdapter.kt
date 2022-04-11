@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.byl.mvvm.util.GenericParadigmUtils
 import com.byl.mvvm.widget.clicks
-import java.lang.reflect.ParameterizedType
 
 /**
  * 通过传入ViewBinding，不再需要写具体xml资源，省略onBindViewHolder中findviewById
@@ -15,14 +15,15 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class BaseAdapter<VB : ViewBinding, T>(
     var mContext: Activity,
-    var listDatas: ArrayList<T>
+    var listDatas: ArrayList<T>?
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val type = javaClass.genericSuperclass as ParameterizedType
-        val clazz = type.actualTypeArguments[0] as Class<VB>
-        val method = clazz.getMethod("inflate", LayoutInflater::class.java)
-        var vb = method.invoke(null, LayoutInflater.from(mContext)) as VB
+        val pathfinders = ArrayList<GenericParadigmUtils.Pathfinder>()
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 0))
+        val clazzVB = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders)
+        val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
+        val vb = method.invoke(null, LayoutInflater.from(mContext)) as VB
         vb.root.layoutParams = RecyclerView.LayoutParams(
             RecyclerView.LayoutParams.MATCH_PARENT,
             RecyclerView.LayoutParams.WRAP_CONTENT
@@ -39,13 +40,13 @@ abstract class BaseAdapter<VB : ViewBinding, T>(
             true
         }
 
-        convert(holder.v as VB, listDatas[position], position)
+        convert(holder.vb as VB, listDatas?.get(position), position)
     }
 
-    abstract fun convert(v: VB, t: T, position: Int)
+    abstract fun convert(vb: VB, t: T?, position: Int)
 
     override fun getItemCount(): Int {
-        return listDatas.size
+        return listDatas?.size ?: 0
     }
 
 

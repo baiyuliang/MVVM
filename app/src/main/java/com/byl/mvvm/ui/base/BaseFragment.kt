@@ -1,34 +1,30 @@
 package com.byl.mvvm.ui.base
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.byl.mvvm.api.error.ErrorResult
+import com.byl.mvvm.event.EventBusManager
 import com.byl.mvvm.event.EventMessage
-import com.byl.mvvm.utils.GenericParadigmUtil
-import com.byl.mvvm.utils.LogUtil
-import com.byl.mvvm.utils.ToastUtil
-import org.greenrobot.eventbus.EventBus
+import com.byl.mvvm.ext.toast
+import com.byl.mvvm.ui.dialog.LoadingDialog
+import com.byl.mvvm.util.Logg
+import com.byl.mvvm.util.GenericParadigmUtils
 import org.greenrobot.eventbus.Subscribe
-import java.lang.reflect.ParameterizedType
 
-
-abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment(), IView {
 
     lateinit var mContext: FragmentActivity
     var contentView: View? = null
     lateinit var vm: VM
     lateinit var vb: VB
-    private var loadingDialog: ProgressDialog? = null
+
+    private val mLoading: LoadingDialog by lazy { LoadingDialog(mContext) }
 
     //Fragment的View加载完毕的标记
     private var isViewCreated = false
@@ -42,14 +38,14 @@ abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment
         super.onCreate(savedInstanceState)
         mContext = context as FragmentActivity
 
-        var pathfinders = ArrayList<GenericParadigmUtil.Pathfinder>()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 0))
-        val clazzVM = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
+        var pathfinders = ArrayList<GenericParadigmUtils.Pathfinder>()
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 0))
+        val clazzVM = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders) as Class<VM>
         vm = ViewModelProvider(this).get(clazzVM)
 
         pathfinders = ArrayList()
-        pathfinders.add(GenericParadigmUtil.Pathfinder(0, 1))
-        val clazzVB = GenericParadigmUtil.parseGenericParadigm(javaClass, pathfinders)
+        pathfinders.add(GenericParadigmUtils.Pathfinder(0, 1))
+        val clazzVB = GenericParadigmUtils.parseGenericParadigm(javaClass, pathfinders)
         val method = clazzVB.getMethod("inflate", LayoutInflater::class.java)
         vb = method.invoke(null, layoutInflater) as VB
 
@@ -65,11 +61,11 @@ abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment
     ): View? {
         if (null == contentView) {
             contentView = vb.root
+            Logg.i(getClassName())
             init()
             initView()
             initClick()
             initData()
-            LogUtil.e(getClassName())
         }
 
         return contentView
@@ -82,30 +78,32 @@ abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment
     }
 
     private fun init() {
-        EventBus.getDefault().register(this)
-        //loading
-        vm.isShowLoading.observe(this, Observer {
-            if (it) showLoading() else dismissLoding()
+        EventBusManager.register(this)
+        // loading
+        vm.isShowLoading.observe(this, {
+            if (it) showLoading() else dismissLoading()
         })
-        //错误信息
-        vm.errorData.observe(this, Observer {
-            if (it.show) ToastUtil.showToast(mContext, it.errMsg)
+        // 错误信息
+        vm.errorData.observe(this, {
+            if (it.show) showMessage(it.errMsg)
             errorResult(it)
         })
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        EventBusManager.unregister(this)
     }
 
-    //事件传递
+    /**
+     * 事件传递
+     */
     @Subscribe
     fun onEventMainThread(msg: EventMessage) {
         handleEvent(msg)
     }
 
-    open fun getClassName(): String? {
+    open fun getClassName(): String {
         val className = "BaseFragment"
         try {
             return javaClass.name
@@ -145,16 +143,16 @@ abstract class BaseFragment<VM : BaseViewModel<VB>, VB : ViewBinding> : Fragment
     //需要懒加载的数据，重写此方法
     abstract fun lazyLoadData()
 
-    private fun showLoading() {
-        if (loadingDialog == null) {
-            loadingDialog = ProgressDialog(mContext)
-        }
-        loadingDialog!!.show()
+    override fun showLoading() {
+        mLoading.showLoading()
     }
 
-    private fun dismissLoding() {
-        loadingDialog?.dismiss()
-        loadingDialog = null
+    override fun dismissLoading() {
+        mLoading.dismiss()
+    }
+
+    override fun showMessage(message: String?) {
+        mContext.toast(message)
     }
 
     /**

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,11 +7,11 @@
     android:orientation="vertical"
     tools:context=".ui.main.MainActivity">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center"
-        android:text="首页"
+        android:text="@string/txt_home"
         android:textColor="@color/gray_3"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -22,22 +21,15 @@
         android:layout_height="0.5dp"
         android:background="@color/gray_d" />
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srlDisableContentWhenLoading="true"
-        app:srlDisableContentWhenRefresh="true"
-        app:srlEnableAutoLoadMore="false"
-        app:srlEnableLoadMore="true"
-        app:srlEnableLoadMoreWhenContentNotFull="false"
-        app:srlEnableOverScrollBounce="false"
-        app:srlEnableRefresh="true">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

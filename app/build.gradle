@@ -1,6 +1,7 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 android {
     compileSdkVersion 29
@@ -44,39 +45,42 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
 
     //glide图片加载框架
-    final GLIDE_VERSION = '4.11.0'
+    final GLIDE_VERSION = '4.12.0'
     implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
     implementation "com.github.bumptech.glide:okhttp3-integration:$GLIDE_VERSION"
 
     //网络请求框架
-    final RETROFIT_VERSION = '2.8.1'
+    final RETROFIT_VERSION = '2.9.0'
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
 
     //网络请求cookie缓存
     implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
     //PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'com.wang.avi:library:2.1.3'
 
     //刷新框架
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2'
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.2'
-
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.1'
+    implementation 'com.scwang.smart:refresh-header-classics:2.0.1'
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
+    compileOnly 'org.simple:androideventbus:1.0.5.1'
+    implementation "com.orhanobut:logger:2.2.0"
 
 }

@@ -6,10 +6,10 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"
+        android:text="@string/txt_hello"
         android:textColor="@color/gray_1"
         android:textSize="26sp"
         android:textStyle="bold" />

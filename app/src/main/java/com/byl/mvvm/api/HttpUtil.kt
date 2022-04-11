@@ -4,8 +4,6 @@ import com.byl.mvvm.api.retrofit.RetrofitClient
 
 class HttpUtil {
 
-    private val mService by lazy { RetrofitClient.getInstance().create() }
-
     //suspend fun test(options: LinkedHashMap<String, String?>) = mService.test(options)
 
     //suspend fun getArticleList(page: Int) = mService.getArticleList(page)
@@ -20,7 +18,11 @@ class HttpUtil {
         }
     }
 
-    //可以直接在BaseViewModel中获取取ApiService对象，简化接口调用
+    private val mService by lazy {
+        RetrofitClient.getInstance().obtainService(ApiService::class.java)
+    }
+
+    // 可以直接在 BaseViewModel 中获取取 ApiService 对象，简化接口调用
     fun getService(): ApiService {
         return mService
     }
